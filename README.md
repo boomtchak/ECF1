@@ -31,7 +31,8 @@ Application de gestion des clients, prospects et contrats développée en Java 1
   * Javadoc générée dans /javadoc
   * Diagrammes UML dans /docs
 
-📁 Structure du projet
+
+🗂 Structure du projet
 
  📁/src
  📁/docs
