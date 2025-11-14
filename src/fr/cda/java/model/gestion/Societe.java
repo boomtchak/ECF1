@@ -1,0 +1,150 @@
+package fr.cda.java.model.gestion;
+
+import fr.cda.java.Exceptions.MandatoryDataException;
+import fr.cda.java.model.liste.Clients;
+import fr.cda.java.model.liste.Prospects;
+import fr.cda.java.model.util.Adresse;
+
+/**
+ * Societe
+ *
+ * <p>Description : …</p>
+ *
+ * @author CDA-09
+ * @version 1.0
+ * @since 05/11/2025
+ */
+public class Societe {
+
+    private int identifiant;
+    private String raisonSociale;
+    private Adresse adresse;
+    private String telephone;
+    private String adresseMail;
+    private String commentaire;
+
+    public Societe(int identifiant, String raisonSociale, Adresse adresse, String telephone,
+            String adresseMail, String commentaire) {
+        this.identifiant = identifiant;
+        this.raisonSociale = raisonSociale;
+        this.adresse = adresse;
+        this.telephone = telephone;
+        this.adresseMail = adresseMail;
+        this.commentaire = commentaire;
+    }
+
+    /**
+     * @return identifiant description
+     */
+    public int getIdentifiant() {
+        return identifiant;
+    }
+
+    /**
+     * @param identifiant description
+     */
+    public void setIdentifiant(int identifiant) {
+
+        this.identifiant = identifiant;
+    }
+
+    /**
+     * @return raisonSociale description
+     */
+    public String getRaisonSociale() {
+        return raisonSociale;
+    }
+
+    /**
+     * @param raisonSociale description
+     */
+    public void setRaisonSociale(String raisonSociale) {
+
+        if (raisonSociale == null) {
+            throw new MandatoryDataException("Le champs raison sociale est obligatoire");
+        }
+        /**
+         * si la raison sociale existe déjà, on s'assure qu'il s'agit pas de l'objet en cours de traitement
+         */
+        if ((Clients.listeClients.containsKey(raisonSociale)
+                && Clients.listeClients.get(raisonSociale).getIdentifiant() != this.identifiant)
+                || (Prospects.listeProspects.containsKey(raisonSociale)
+                && Prospects.listeProspects.get(raisonSociale).getIdentifiant()
+                != this.identifiant)) {
+
+        }
+        this.raisonSociale = raisonSociale;
+    }
+
+    /**
+     * @return adresse description
+     */
+    public Adresse getAdresse() {
+        return adresse;
+    }
+
+    /**
+     * @param adresse description
+     */
+    public void setAdresse(Adresse adresse) {
+
+        this.adresse = adresse;
+    }
+
+    /**
+     * @return telephone description
+     */
+    public String getTelephone() {
+        return telephone;
+    }
+
+    /**
+     * @param telephone description
+     */
+    public void setTelephone(String telephone) {
+
+        if (telephone == null) {
+            telephone = "";
+        }
+
+        this.telephone = telephone;
+    }
+
+    /**
+     * @return adresseMail description
+     */
+    public String getAdresseMail() {
+        return adresseMail;
+    }
+
+    /**
+     * @param adresseMail description
+     */
+    public void setAdresseMail(String adresseMail) {
+
+        if (adresseMail == null) {
+            adresseMail = "";
+        }
+
+        this.adresseMail = adresseMail;
+    }
+
+    /**
+     * @return commentaire description
+     */
+    public String getCommentaire() {
+        return commentaire;
+    }
+
+    /**
+     * @param commentaire description
+     */
+    public void setCommentaire(String commentaire) {
+
+        if (commentaire == null) {
+            commentaire = "";
+        }
+
+        this.commentaire = commentaire;
+    }
+}
