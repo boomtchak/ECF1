@@ -7,7 +7,7 @@
 *.class
 
 # Logs
-*.log
+*.Logs
 
 # IDE / Editor
 .idea/

@@ -1,3 +1,5 @@
+package fr.cda.java.model.util;
+
 import java.util.regex.Pattern;
 
 /**
@@ -28,7 +30,13 @@ public enum Regex {
     /**
      * Format E.164 international simplifié (ex: +33123456789).
      */
-    PHONE_INTERNATIONAL_E164("^\\+\\d{1,15}$");
+    PHONE_INTERNATIONAL_E164("^\\+\\d{1,15}$"),
+
+    /**
+     * évite les codes postaux fantaisistes (ex: 00000, 99999).
+     * vérifie que le département existe (de 01 à 98, incluant Monaco et DOM-TOM).
+     */
+    CODE_POSTAL_EXISTANT("^(?:0[1-9]|[1-38]\\\\d|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8[0-9]|9[0-8])\\\\d{3}$");
 
 
     // --- Logique de l'Enum ---

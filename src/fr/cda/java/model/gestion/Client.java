@@ -1,5 +1,7 @@
 package fr.cda.java.model.gestion;
 
+import fr.cda.java.Exceptions.MandatoryDataException;
+import fr.cda.java.Exceptions.donneeException;
 import fr.cda.java.model.util.Adresse;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +22,11 @@ public class Client extends Societe {
     int nombreEmployes;
     List<Contrat> listeContrats = new ArrayList<>();
 
-    public Client(int identifiant, String raisonSociale, Adresse adresse,
-            String telephone, String adresseMail, String commentaire) {
-        super(identifiant, raisonSociale, adresse, telephone, adresseMail, commentaire);
+    public Client(String raisonSociale, Adresse adresse, String telephone, String adresseMail,
+            String commentaire, long chiffreAffaire, int nombreEmployes) {
+        super(raisonSociale, adresse, telephone, adresseMail, commentaire);
+        this.setChiffreAffaire(chiffreAffaire);
+        this.setNombreEmployes(nombreEmployes);
     }
 
 
@@ -37,6 +41,12 @@ public class Client extends Societe {
      * @param chiffreAffaire description
      */
     public void setChiffreAffaire(long chiffreAffaire) {
+        if (chiffreAffaire == 0) {
+            throw new MandatoryDataException("chiffre d'affaire");
+        }
+        if(chiffreAffaire < 200){
+            throw new donneeException("le chiffre d'affaire doit être supérieur à 200");
+        }
 
         this.chiffreAffaire = chiffreAffaire;
     }
@@ -52,7 +62,9 @@ public class Client extends Societe {
      * @param nombreEmployes description
      */
     public void setNombreEmployes(int nombreEmployes) {
-
+        if (nombreEmployes == 0) {
+            throw new MandatoryDataException("nombre d'employés");
+        }
         this.nombreEmployes = nombreEmployes;
     }
 

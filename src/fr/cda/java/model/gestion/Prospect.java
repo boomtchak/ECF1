@@ -1,7 +1,8 @@
 package fr.cda.java.model.gestion;
 
+import fr.cda.java.Exceptions.RegexException;
 import fr.cda.java.model.util.Adresse;
-import fr.cda.java.model.util.Interet;
+import fr.cda.java.model.util.Regex;
 import java.time.LocalDate;
 
 /**
@@ -16,13 +17,29 @@ import java.time.LocalDate;
 public class Prospect extends Societe {
 
     private LocalDate dateProspection;
-    private String interresse;
+    private Interresse interet;
 
-    public Prospect(int identifiant, String raisonSociale, Adresse adresse, String telephone,
-            String adresseMail, String commentaire, LocalDate dateProspection, String interresse) {
-        super(identifiant, raisonSociale, adresse, telephone, adresseMail, commentaire);
+    public static enum Interresse {
+        OUI("est interessé"),
+        NON("n'est pas interressé"),
+        INCONNU("");
+
+        private final String description;
+
+        Interresse(String description) {
+            this.description = description;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+    }
+
+    public Prospect(String raisonSociale, Adresse adresse, String telephone,
+            String adresseMail, String commentaire, LocalDate dateProspection, Interresse interresse) {
+        super(raisonSociale, adresse, telephone, adresseMail, commentaire);
         this.dateProspection = dateProspection;
-        this.interresse = interresse;
+        this.interet = interresse;
 
     }
 
@@ -37,26 +54,25 @@ public class Prospect extends Societe {
      * @param dateProspection description
      */
     public void setDateProspection(LocalDate dateProspection) {
-
         this.dateProspection = dateProspection;
     }
 
     /**
-     * @return interresse description
+     * @return interet description
      */
-    public String getInterresse() {
-        return interresse;
+    public String getInteret() {
+        return interet;
     }
 
     /**
-     * @param interresse description
+     * @param interet description
      */
-    public void setInterresse(String interresse) {
+    public void setInteret(Interresse interet) {
 
-        if (interresse == null) {
-            interresse = "";
+        if (interet == null) {
+            interet= Interresse.INCONNU;
         }
 
-        this.interresse = interresse;
+        this.interet = interet;
     }
 }

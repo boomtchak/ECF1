@@ -1,6 +1,6 @@
 package fr.cda.java.vue;
 
-import fr.cda.java.Exceptions.donneeCorrompueException;
+import fr.cda.java.Exceptions.donneeException;
 import fr.cda.java.model.gestion.Client;
 import fr.cda.java.model.gestion.Prospect;
 import fr.cda.java.model.liste.Clients;
@@ -130,7 +130,7 @@ public class ListeSocietes extends JDialog {
             //ca peut arriver dans des tests de robustesse, ca me permettra de savoir que ca s'est passé.
             System.out.println(
                     "le TypeSociete n'était pas initialisé dans l'écran des listes, ca n'est pas sensé être possible");
-            throw new donneeCorrompueException(
+            throw new donneeException(
                     "le TypeSociete ne s'est pas correctement initialisé.");
         }
 

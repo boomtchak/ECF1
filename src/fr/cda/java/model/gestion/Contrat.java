@@ -70,7 +70,7 @@ private String montantContrat;
     public void setNomContrat(String nomContrat) {
 
         if (nomContrat == null) {
-           throw new MandatoryDataException("Le champs Nom du contrat est obligatoire.");
+           throw new MandatoryDataException("nom du contrat");
         }
 
         this.nomContrat = nomContrat;
@@ -88,7 +88,7 @@ private String montantContrat;
      */
     public void setMontantContrat(String montantContrat) {
         if (montantContrat == null) {
-            throw new MandatoryDataException("Le champs montant du ontrat est obligatoire.");
+            throw new MandatoryDataException("montant du contrat");
         }
 
 

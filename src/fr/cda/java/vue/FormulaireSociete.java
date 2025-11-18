@@ -88,6 +88,9 @@ public class FormulaireSociete extends JDialog {
     }
 
     private void onOK() {
+
+        // La date doit être renseignée et avoir le format «
+        //        jj/mm/aaaa ».
         // add your code here
         dispose();
     }

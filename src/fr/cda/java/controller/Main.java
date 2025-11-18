@@ -11,8 +11,9 @@ void main() {
     IO.println(String.format("Hello and welcome!"));
 
     for (int i = 1; i <= 5; i++) {
-        Adresse adresse = new Adresse(
-        Client client = new Client(1, "nono",, "0633710842");
+        Adresse adresse = new Adresse("4", "rue de Berne", "68000", "COLMAR");
+        Client client = new Client(1, "nono", adresse, "0633710842", "nordine.sefroun@laposte.net","commentaire");
+        Clients.listeClients.put(client.getRaisonSociale(), client);
         JSONObject son = new JSONObject(Clients.listeClients);
 
         System.out.println(son);

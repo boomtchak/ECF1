@@ -1,5 +1,8 @@
 package fr.cda.java.model.util;
 
+import fr.cda.java.Exceptions.MandatoryDataException;
+import fr.cda.java.Exceptions.RegexException;
+
 /**
  * Adresse
  *
@@ -11,19 +14,20 @@ package fr.cda.java.model.util;
  */
 public class Adresse {
 
-    int identifiant;
-    String numeroDeRue;
-    String nomDeRue;
-    String codePostal;
-    String ville;
+    private static int identifiant;
+    private String numeroDeRue;
+    private String nomDeRue;
+    private String codePostal;
+    private String ville;
 
-    public Adresse(int identifiant, String numeroDeRue, String nomDeRue, String codePostal,
+    public Adresse(String numeroDeRue, String nomDeRue, String codePostal,
             String ville) {
-        this.identifiant = identifiant;
-        this.numeroDeRue = numeroDeRue;
-        this.nomDeRue = nomDeRue;
-        this.codePostal = codePostal;
-        this.ville = ville;
+        this.setIdentifiant(identifiant++);
+
+        this.setNumeroDeRue(numeroDeRue);
+        this.setNomDeRue(nomDeRue);
+        this.setCodePostal(codePostal);
+        this.setVille(ville);
     }
 
     /**
@@ -37,6 +41,7 @@ public class Adresse {
      * @param identifiant description
      */
     public void setIdentifiant(int identifiant) {
+
 
         this.identifiant = identifiant;
     }
@@ -53,8 +58,8 @@ public class Adresse {
      */
     public void setNumeroDeRue(String numeroDeRue) {
 
-        if (numeroDeRue == null) {
-            numeroDeRue = "";
+        if(numeroDeRue == "" || numeroDeRue == null){
+            throw new MandatoryDataException("numero de rue");
         }
 
         this.numeroDeRue = numeroDeRue;
@@ -72,8 +77,8 @@ public class Adresse {
      */
     public void setNomDeRue(String nomDeRue) {
 
-        if (nomDeRue == null) {
-            nomDeRue = "";
+        if(nomDeRue == "" || nomDeRue == null){
+            throw new MandatoryDataException("nom de rue");
         }
 
         this.nomDeRue = nomDeRue;
@@ -91,8 +96,11 @@ public class Adresse {
      */
     public void setCodePostal(String codePostal) {
 
-        if (codePostal == null) {
-            codePostal = "";
+        if(codePostal == "" || codePostal == null){
+            throw new MandatoryDataException("code postal");
+        }
+        if(!codePostal.matches(Regex.CODE_POSTAL_EXISTANT.getPattern())){
+throw  new RegexException("code postal");
         }
 
         this.codePostal = codePostal;
@@ -110,8 +118,8 @@ public class Adresse {
      */
     public void setVille(String ville) {
 
-        if (ville == null) {
-            ville = "";
+        if(ville == "" || ville == null){
+            throw new MandatoryDataException("ville");
         }
 
         this.ville = ville;
