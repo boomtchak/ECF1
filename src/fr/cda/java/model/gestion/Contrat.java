@@ -13,18 +13,19 @@ import fr.cda.java.model.util.Adresse;
  * @since 05/11/2025
  */
 public  class Contrat {
-private static int identifiant;
+private static int compteurIdentifiant =0;
+private int identifiant;
 private int identifiantClient;
 private String nomContrat;
 private String montantContrat;
 
-    public Contrat(int identifiant, int identifiantClient, String nomContrat,
+    public Contrat(int identifiantClient, String nomContrat,
             String montantContrat) {
+        this.setIdentifiant( compteurIdentifiant);
         this.setIdentifiantClient(identifiantClient);
         this.setNomContrat(nomContrat);
         this.setMontantContrat(montantContrat);
-        this.setIdentifiant(identifiant);
-        identifiant ++;
+        compteurIdentifiant ++;
     }
 
     /**

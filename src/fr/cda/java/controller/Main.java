@@ -12,7 +12,7 @@ void main() {
 
     for (int i = 1; i <= 5; i++) {
         Adresse adresse = new Adresse("4", "rue de Berne", "68000", "COLMAR");
-        Client client = new Client(1, "nono", adresse, "0633710842", "nordine.sefroun@laposte.net","commentaire");
+        Client client = new Client("nono", adresse, "0633710842", "nordine.sefroun@laposte.net","commentaire",220,12);
         Clients.listeClients.put(client.getRaisonSociale(), client);
         JSONObject son = new JSONObject(Clients.listeClients);
 

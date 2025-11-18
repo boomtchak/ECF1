@@ -1,6 +1,7 @@
 package fr.cda.java.model.gestion;
 
 import fr.cda.java.Exceptions.RegexException;
+import fr.cda.java.model.liste.Prospects;
 import fr.cda.java.model.util.Adresse;
 import fr.cda.java.model.util.Regex;
 import java.time.LocalDate;
@@ -16,6 +17,8 @@ import java.time.LocalDate;
  */
 public class Prospect extends Societe {
 
+    private static int compteurIdentifiant = 0;
+    private int identifiant;
     private LocalDate dateProspection;
     private Interresse interet;
 
@@ -37,9 +40,11 @@ public class Prospect extends Societe {
 
     public Prospect(String raisonSociale, Adresse adresse, String telephone,
             String adresseMail, String commentaire, LocalDate dateProspection, Interresse interresse) {
-        super(raisonSociale, adresse, telephone, adresseMail, commentaire);
+        super(compteurIdentifiant,raisonSociale, adresse, telephone, adresseMail, commentaire);
         this.setDateProspection(dateProspection);
         this.setInteret(interresse);
+        compteurIdentifiant++;
+        Prospects.listeProspects.put(raisonSociale, this);
 
     }
 

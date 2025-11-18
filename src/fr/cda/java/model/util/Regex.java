@@ -36,7 +36,7 @@ public enum Regex {
      * évite les codes postaux fantaisistes (ex: 00000, 99999).
      * vérifie que le département existe (de 01 à 98, incluant Monaco et DOM-TOM).
      */
-    CODE_POSTAL_EXISTANT("^(?:0[1-9]|[1-38]\\\\d|4[0-9]|5[0-9]|6[0-9]|7[0-9]|8[0-9]|9[0-8])\\\\d{3}$");
+    CODE_POSTAL_EXISTANT("/^(?:(?:0[1-9]|[1-8]\\d|9[0-5])\\d{3}|97[1-8]\\d{2}|98\\d{2})$/\n");
 
 
     // --- Logique de l'Enum ---

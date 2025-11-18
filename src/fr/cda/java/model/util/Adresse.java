@@ -59,7 +59,7 @@ public class Adresse {
     public void setNumeroDeRue(String numeroDeRue) {
 
         if(numeroDeRue == "" || numeroDeRue == null){
-            throw new MandatoryDataException("numero de rue");
+            throw new MandatoryDataException("numero de la rue");
         }
 
         this.numeroDeRue = numeroDeRue;
@@ -78,7 +78,7 @@ public class Adresse {
     public void setNomDeRue(String nomDeRue) {
 
         if(nomDeRue == "" || nomDeRue == null){
-            throw new MandatoryDataException("nom de rue");
+            throw new MandatoryDataException("nom de la rue");
         }
 
         this.nomDeRue = nomDeRue;
@@ -99,7 +99,7 @@ public class Adresse {
         if(codePostal == "" || codePostal == null){
             throw new MandatoryDataException("code postal");
         }
-        if(!codePostal.matches(Regex.CODE_POSTAL_EXISTANT.getPattern())){
+        if(!codePostal.matches(Regex.POSTAL_CODE_FR_SIMPLE.getPattern())){
 throw  new RegexException("code postal");
         }
 

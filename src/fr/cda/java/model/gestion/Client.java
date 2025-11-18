@@ -2,6 +2,7 @@ package fr.cda.java.model.gestion;
 
 import fr.cda.java.Exceptions.MandatoryDataException;
 import fr.cda.java.Exceptions.donneeException;
+import fr.cda.java.model.liste.Clients;
 import fr.cda.java.model.util.Adresse;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +18,20 @@ import java.util.List;
  */
 public class Client extends Societe {
 
-    static int identifiant;
+    private static int compteurIdentifiant = 0;
+    private int identifiant;
     long chiffreAffaire;
     int nombreEmployes;
     List<Contrat> listeContrats = new ArrayList<>();
 
     public Client(String raisonSociale, Adresse adresse, String telephone, String adresseMail,
             String commentaire, long chiffreAffaire, int nombreEmployes) {
-        super(raisonSociale, adresse, telephone, adresseMail, commentaire);
+
+        super(compteurIdentifiant, raisonSociale, adresse, telephone, adresseMail, commentaire);
         this.setChiffreAffaire(chiffreAffaire);
         this.setNombreEmployes(nombreEmployes);
+        Clients.listeClients.put(raisonSociale, this);
+        compteurIdentifiant++;
     }
 
 

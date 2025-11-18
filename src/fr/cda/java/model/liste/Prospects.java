@@ -15,7 +15,7 @@ import java.util.HashMap;
  */
 public class Prospects {
 
-    public static HashMap<Integer, Prospect> listeProspects = new HashMap<Integer, Prospect>();
+    public static HashMap<String, Prospect> listeProspects = new HashMap<String, Prospect>();
 
 
 }

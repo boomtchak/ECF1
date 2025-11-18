@@ -20,28 +20,21 @@ import java.util.GregorianCalendar;
  */
 public class Societe {
 
-    private static int identifiant;
+    private  int identifiant;
     private String raisonSociale;
     private Adresse adresse;
     private String telephone;
     private String adresseMail;
     private String commentaire;
 
-    public Societe(String raisonSociale, Adresse adresse, String telephone,
+    public Societe(int identifiant, String raisonSociale, Adresse adresse, String telephone,
             String adresseMail, String commentaire) {
-        this.setIdentifiant(identifiant++);
         this.setRaisonSociale(raisonSociale);
         this.setAdresse(adresse);
         this.setTelephone(telephone);
         this.setAdresseMail(adresseMail);
         this.setCommentaire(commentaire);
-    }
-
-    /**
-     * @return identifiant description
-     */
-    public int getIdentifiant() {
-        return identifiant;
+        this.setIdentifiant(identifiant);
     }
 
     /**
@@ -51,6 +44,15 @@ public class Societe {
 
         this.identifiant = identifiant;
     }
+
+    /**
+     * @return identifiant description
+     */
+    public int getIdentifiant() {
+        return identifiant;
+    }
+
+
 
     /**
      * @return raisonSociale description

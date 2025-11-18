@@ -121,7 +121,7 @@ public class ListeSocietes extends JDialog {
                         prospect.getAdresse().toString(), // Long
                         prospect.getTelephone(), // Long
                         prospect.getDateProspection(), // Long
-                        prospect.getInterresse(), // int
+                        prospect.getInteret(), // int
                         prospect.getCommentaire() // Long
                 };
                 modelTable.addRow(dataRow);
