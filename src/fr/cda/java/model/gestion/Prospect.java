@@ -38,8 +38,8 @@ public class Prospect extends Societe {
     public Prospect(String raisonSociale, Adresse adresse, String telephone,
             String adresseMail, String commentaire, LocalDate dateProspection, Interresse interresse) {
         super(raisonSociale, adresse, telephone, adresseMail, commentaire);
-        this.dateProspection = dateProspection;
-        this.interet = interresse;
+        this.setDateProspection(dateProspection);
+        this.setInteret(interresse);
 
     }
 
@@ -60,7 +60,7 @@ public class Prospect extends Societe {
     /**
      * @return interet description
      */
-    public String getInteret() {
+    public Interresse getInteret() {
         return interet;
     }
 
