@@ -2,6 +2,7 @@ package fr.cda.java.model.util;
 
 import fr.cda.java.Exceptions.MandatoryDataException;
 import fr.cda.java.Exceptions.RegexException;
+import org.json.JSONObject;
 import org.junit.platform.commons.util.StringUtils;
 
 /**
@@ -14,7 +15,7 @@ import org.junit.platform.commons.util.StringUtils;
  * @since 05/11/2025
  */
 public class Adresse {
-
+    private static int compteurIdentifiant = 1;
     private static int identifiant;
     private String numeroDeRue;
     private String nomDeRue;
@@ -23,12 +24,22 @@ public class Adresse {
 
     public Adresse(String numeroDeRue, String nomDeRue, String codePostal,
             String ville) {
-        this.setIdentifiant(identifiant++);
+        this.setIdentifiant(compteurIdentifiant);
 
         this.setNumeroDeRue(numeroDeRue);
         this.setNomDeRue(nomDeRue);
         this.setCodePostal(codePostal);
         this.setVille(ville);
+        compteurIdentifiant++;
+    }
+    public Adresse(JSONObject json) {
+        this.setIdentifiant(json.getInt("identifiant"));
+
+        this.setNumeroDeRue(json.getString("numeroDeRue"));
+        this.setNomDeRue(json.getString("nomDeRue"));
+        this.setCodePostal(json.getString("codePostal"));
+        this.setVille(json.getString("ville"));
+        compteurIdentifiant++;
     }
 
     /**

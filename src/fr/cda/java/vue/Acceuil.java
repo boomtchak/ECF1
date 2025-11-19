@@ -15,6 +15,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -45,9 +46,10 @@ public class Acceuil extends JDialog {
     /**
      * permet de sauvegarder charger
      */
-    private Dao dao = new Dao();
+    private static Dao dao = new Dao();
 
     public Acceuil() {
+
         this.setTitle("Menu principal");
         setContentPane(contentPane);
         setModal(true);
@@ -147,7 +149,16 @@ public class Acceuil extends JDialog {
         dispose();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args)  {
+        try{
+            dao.charger();
+
+        } catch (Exception e) {
+            System.out.println("attention le chargement a fail");
+        }
+
+        try{
+
         Acceuil dialog = new Acceuil();
         Dimension perfectSize = dialog.getSize();
 
@@ -160,6 +171,16 @@ public class Acceuil extends JDialog {
         dialog.paneauSociete.setVisible(false);
         dialog.setVisible(true);
         System.exit(0);
+        }catch (Exception e){
+
+        }finally {
+            try{
+            dao.Sauvegarder();
+
+            } catch (IOException e) {
+                System.out.println("attention la sauvegarde a fail");
+            }
+        }
     }
 
     private void activerBoutonAction() {

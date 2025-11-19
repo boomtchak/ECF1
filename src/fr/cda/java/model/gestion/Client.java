@@ -8,6 +8,7 @@ import fr.cda.java.model.liste.Prospects;
 import fr.cda.java.model.util.Adresse;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONObject;
 
 /**
  * Client
@@ -28,13 +29,49 @@ public class Client extends Societe {
     public Client(String raisonSociale, Adresse adresse, String telephone, String adresseMail,
             String commentaire, long chiffreAffaire, int nombreEmployes) {
 
-        super(compteurIdentifiant, raisonSociale, adresse, telephone, adresseMail, commentaire);
+        super(compteurIdentifiant, adresse, telephone, adresseMail, commentaire);
         this.setChiffreAffaire(chiffreAffaire);
         this.setNombreEmployes(nombreEmployes);
+        this.setRaisonSociale(raisonSociale);
         Clients.listeClients.put(raisonSociale, this);
         compteurIdentifiant++;
     }
 
+    /**
+     * C'est plus safe pour anticiper les données corrompues en json de passer par ici et utiliser
+     * les setter.
+     *
+     * @param json
+     */
+    public Client(JSONObject json) {
+
+        super(json.getInt("identifiant"),
+                new Adresse(json.getJSONObject("adresse")),
+                json.getString("telephone"),
+                json.getString("adresseMail"),
+                json.getString("commentaire")
+        );
+        this.setChiffreAffaire(json.getLong("chiffreAffaire"));
+        this.setRaisonSociale(json.getString("raisonSociale"));
+        this.setNombreEmployes(json.getInt("nombreEmployes"));
+        Clients.listeClients.put(json.getString("raisonSociale"), this);
+        compteurIdentifiant++;
+    }
+
+    /**
+     * @return listeContrats description
+     */
+    public List<Contrat> getListeContrats() {
+        return listeContrats;
+    }
+
+    /**
+     * @param listeContrats description
+     */
+    public void setListeContrats(List<Contrat> listeContrats) {
+
+        this.listeContrats = listeContrats;
+    }
 
     /**
      * @return chiffreAffaire description
@@ -47,9 +84,6 @@ public class Client extends Societe {
      * @param chiffreAffaire description
      */
     public void setChiffreAffaire(long chiffreAffaire) {
-        if (chiffreAffaire == 0) {
-            throw new MandatoryDataException("chiffre d'affaire");
-        }
         if (chiffreAffaire < 200) {
             throw new donneeException("le chiffre d'affaire doit être supérieur à 200");
         }
@@ -73,6 +107,7 @@ public class Client extends Societe {
         }
         this.nombreEmployes = nombreEmployes;
     }
+
     @Override
     public void setRaisonSociale(String raisonSociale) {
         /**

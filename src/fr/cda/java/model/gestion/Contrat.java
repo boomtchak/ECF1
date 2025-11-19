@@ -1,7 +1,7 @@
 package fr.cda.java.model.gestion;
 
 import fr.cda.java.Exceptions.MandatoryDataException;
-import fr.cda.java.model.util.Adresse;
+import org.json.JSONObject;
 import org.junit.platform.commons.util.StringUtils;
 
 /**
@@ -13,20 +13,30 @@ import org.junit.platform.commons.util.StringUtils;
  * @version 1.0
  * @since 05/11/2025
  */
-public  class Contrat {
-private static int compteurIdentifiant =1;
-private int identifiant;
-private int identifiantClient;
-private String nomContrat;
-private String montantContrat;
+public class Contrat {
+
+    private static int compteurIdentifiant = 1;
+    private int identifiant;
+    private int identifiantClient;
+    private String nomContrat;
+    private String montantContrat;
 
     public Contrat(int identifiantClient, String nomContrat,
             String montantContrat) {
-        this.setIdentifiant( compteurIdentifiant);
+        this.setIdentifiant(compteurIdentifiant);
         this.setIdentifiantClient(identifiantClient);
         this.setNomContrat(nomContrat);
         this.setMontantContrat(montantContrat);
-        compteurIdentifiant ++;
+        compteurIdentifiant++;
+    }
+
+    
+    public Contrat(JSONObject json) {
+        this.setIdentifiant(json.getInt("identifiant"));
+        this.setIdentifiantClient(json.getInt("identifiantClient"));
+        this.setNomContrat(json.getString("nomContrat"));
+        this.setMontantContrat(json.getString("montantContrat"));
+        compteurIdentifiant++;
     }
 
     /**
@@ -74,7 +84,7 @@ private String montantContrat;
     public void setNomContrat(String nomContrat) {
 
         if (StringUtils.isBlank(nomContrat)) {
-           throw new MandatoryDataException("nom du contrat");
+            throw new MandatoryDataException("nom du contrat");
         }
 
         this.nomContrat = nomContrat;
@@ -94,7 +104,6 @@ private String montantContrat;
         if (StringUtils.isBlank(montantContrat)) {
             throw new MandatoryDataException("montant du contrat");
         }
-
 
         this.montantContrat = montantContrat;
     }

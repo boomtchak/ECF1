@@ -29,9 +29,8 @@ public class Societe {
     private String adresseMail;
     private String commentaire;
 
-    public Societe(int identifiant, String raisonSociale, Adresse adresse, String telephone,
+    public Societe(int identifiant,  Adresse adresse, String telephone,
             String adresseMail, String commentaire) {
-        this.setRaisonSociale(raisonSociale);
         this.setAdresse(adresse);
         this.setTelephone(telephone);
         this.setAdresseMail(adresseMail);

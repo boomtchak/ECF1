@@ -27,7 +27,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 class SocieteTest {
 
     Adresse adresse = new Adresse("4", "rue de Berne", "68000", "COLMAR");
-    Societe instance = new Societe(1, "SocieteTest", adresse,
+    Societe instance = new Societe(1,  adresse,
             "0633710842", "nordine.sefroun@laposte.net", "commentaire");
 
 

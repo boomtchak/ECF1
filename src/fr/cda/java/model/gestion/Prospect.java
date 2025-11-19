@@ -5,8 +5,10 @@ import fr.cda.java.Exceptions.UniciteException;
 import fr.cda.java.model.liste.Clients;
 import fr.cda.java.model.liste.Prospects;
 import fr.cda.java.model.util.Adresse;
+import fr.cda.java.model.util.Interet;
 import fr.cda.java.model.util.Regex;
 import java.time.LocalDate;
+import org.json.JSONObject;
 
 /**
  * Prospect
@@ -40,10 +42,29 @@ public class Prospect extends Societe {
 
     public Prospect(String raisonSociale, Adresse adresse, String telephone,
             String adresseMail, String commentaire, LocalDate dateProspection, Interresse interresse) {
-        super(compteurIdentifiant,raisonSociale, adresse, telephone, adresseMail, commentaire);
+        super(compteurIdentifiant, adresse, telephone, adresseMail, commentaire);
         this.setDateProspection(dateProspection);
         this.setInteret(interresse);
+        this.setRaisonSociale(raisonSociale);
         Prospects.listeProspects.put(raisonSociale, this);
+        compteurIdentifiant++;
+
+
+    }
+
+    public Prospect(JSONObject json) {
+        super(json.getInt("identifiant"),
+                new Adresse(json.getJSONObject("adresse")),
+                json.getString("telephone"),
+                json.getString("adresseMail"),
+                json.getString("commentaire")
+        );
+        String dateStr = json.getString("dateProspection");
+        LocalDate date = LocalDate.parse(dateStr); // format ISO yyyy-MM-dd
+        this.setDateProspection(date);
+        this.setInteret(Interresse.valueOf(json.getString("interet")));
+        this.setRaisonSociale(json.getString("raisonSociale"));
+        Prospects.listeProspects.put(json.getString("raisonSociale"), this);
         compteurIdentifiant++;
 
     }
