@@ -21,8 +21,8 @@ import org.junit.platform.commons.util.StringUtils;
  */
 public class Societe {
 
-    protected static int compteurIdentifiant = 1;
-    private  int identifiant;
+
+    private int identifiant;
     private String raisonSociale;
     private Adresse adresse;
     private String telephone;
@@ -71,16 +71,7 @@ public class Societe {
         if (StringUtils.isBlank(raisonSociale)) {
             throw new MandatoryDataException("raison sociale");
         }
-        /**
-         * si la raison sociale existe déjà, on s'assure qu'il s'agit pas de l'objet en cours de traitement
-         */
-        if ((Clients.listeClients.containsKey(raisonSociale)
-                && Clients.listeClients.get(raisonSociale).getIdentifiant() != this.identifiant)
-                || (Prospects.listeProspects.containsKey(raisonSociale)
-                && Prospects.listeProspects.get(raisonSociale).getIdentifiant()
-                != this.identifiant)) {
-            throw new UniciteException(raisonSociale);
-        }
+
         this.raisonSociale = raisonSociale;
     }
 

@@ -1,6 +1,8 @@
 package fr.cda.java.model.gestion;
 
 import fr.cda.java.Exceptions.RegexException;
+import fr.cda.java.Exceptions.UniciteException;
+import fr.cda.java.model.liste.Clients;
 import fr.cda.java.model.liste.Prospects;
 import fr.cda.java.model.util.Adresse;
 import fr.cda.java.model.util.Regex;
@@ -16,7 +18,7 @@ import java.time.LocalDate;
  * @since 05/11/2025
  */
 public class Prospect extends Societe {
-
+    private static int compteurIdentifiant = 1;
     private LocalDate dateProspection;
     private Interresse interet;
 
@@ -77,5 +79,19 @@ public class Prospect extends Societe {
         }
 
         this.interet = interet;
+    }
+
+    @Override
+    public void setRaisonSociale(String raisonSociale) {
+        /**
+         * si la raison sociale existe déjà, on s'assure qu'il s'agit pas de l'objet en cours de traitement
+         */
+        if (Clients.listeClients.containsKey(raisonSociale)
+                || (Prospects.listeProspects.containsKey(raisonSociale)
+                && Prospects.listeProspects.get(raisonSociale).getIdentifiant()
+                != this.getIdentifiant())) {
+            throw new UniciteException(raisonSociale);
+        }
+        super.setRaisonSociale(raisonSociale);
     }
 }
