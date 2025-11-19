@@ -2,6 +2,7 @@ package fr.cda.java.model.gestion;
 
 import fr.cda.java.Exceptions.MandatoryDataException;
 import fr.cda.java.model.util.Adresse;
+import org.junit.platform.commons.util.StringUtils;
 
 /**
  * Contrat
@@ -13,7 +14,7 @@ import fr.cda.java.model.util.Adresse;
  * @since 05/11/2025
  */
 public  class Contrat {
-private static int compteurIdentifiant =0;
+private static int compteurIdentifiant =1;
 private int identifiant;
 private int identifiantClient;
 private String nomContrat;
@@ -54,7 +55,9 @@ private String montantContrat;
      * @param identifiantClient description
      */
     public void setIdentifiantClient(int identifiantClient) {
-
+        if (identifiantClient == 0) {
+            throw new MandatoryDataException("identifiant du client");
+        }
         this.identifiantClient = identifiantClient;
     }
 
@@ -70,7 +73,7 @@ private String montantContrat;
      */
     public void setNomContrat(String nomContrat) {
 
-        if (nomContrat == null) {
+        if (StringUtils.isBlank(nomContrat)) {
            throw new MandatoryDataException("nom du contrat");
         }
 
@@ -88,7 +91,7 @@ private String montantContrat;
      * @param montantContrat description
      */
     public void setMontantContrat(String montantContrat) {
-        if (montantContrat == null) {
+        if (StringUtils.isBlank(montantContrat)) {
             throw new MandatoryDataException("montant du contrat");
         }
 

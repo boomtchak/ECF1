@@ -6,6 +6,8 @@ import fr.cda.java.Exceptions.donneeException;
 import fr.cda.java.model.gestion.Client;
 import fr.cda.java.model.util.Adresse;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -14,10 +16,11 @@ import org.junit.jupiter.params.provider.ValueSource;
  * Le chiffre d’affaires devra être supérieur à 200 Le nombre d’employés devra être renseigné et
  * être strictement supérieur à zéro
  */
+@TestInstance(Lifecycle.PER_CLASS)
 class ClientTest {
 
     Adresse adresse = new Adresse("4", "rue de Berne", "68000", "COLMAR");
-    Client instance = new Client("raisonSociale", adresse,
+    Client instance = new Client("ClientTest", adresse,
             "0633710842", "nordine.sefroun@laposte.net", "commentaire",
             220, 14);
 

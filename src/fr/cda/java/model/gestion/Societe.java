@@ -8,6 +8,7 @@ import fr.cda.java.model.liste.Prospects;
 import fr.cda.java.model.util.Adresse;
 import fr.cda.java.model.util.Regex;
 import java.util.GregorianCalendar;
+import org.junit.platform.commons.util.StringUtils;
 
 /**
  * Societe
@@ -20,6 +21,7 @@ import java.util.GregorianCalendar;
  */
 public class Societe {
 
+    protected static int compteurIdentifiant = 1;
     private  int identifiant;
     private String raisonSociale;
     private Adresse adresse;
@@ -66,7 +68,7 @@ public class Societe {
      */
     public void setRaisonSociale(String raisonSociale) {
 
-        if (raisonSociale == null) {
+        if (StringUtils.isBlank(raisonSociale)) {
             throw new MandatoryDataException("raison sociale");
         }
         /**
@@ -108,7 +110,7 @@ public class Societe {
      * @param telephone description
      */
     public void setTelephone(String telephone) {
-        if (telephone == null) {
+        if (StringUtils.isBlank(telephone)) {
             throw new MandatoryDataException("téléphone");
         }
         if(!telephone.matches(Regex.PHONE_FR_SIMPLE.getPattern())){
@@ -130,7 +132,7 @@ public class Societe {
      */
     public void setAdresseMail(String adresseMail) {
 
-        if (adresseMail == null) {
+        if (StringUtils.isBlank(adresseMail)) {
             throw new MandatoryDataException("adresse mail");
         }
         if(!adresseMail.matches(Regex.EMAIL.getPattern())){
@@ -152,7 +154,7 @@ public class Societe {
      */
     public void setCommentaire(String commentaire) {
 
-        if (commentaire == null) {
+        if (StringUtils.isBlank(commentaire)) {
             commentaire = "";
         }
 

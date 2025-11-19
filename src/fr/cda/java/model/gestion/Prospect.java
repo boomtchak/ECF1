@@ -17,8 +17,6 @@ import java.time.LocalDate;
  */
 public class Prospect extends Societe {
 
-    private static int compteurIdentifiant = 0;
-    private int identifiant;
     private LocalDate dateProspection;
     private Interresse interet;
 
@@ -43,8 +41,8 @@ public class Prospect extends Societe {
         super(compteurIdentifiant,raisonSociale, adresse, telephone, adresseMail, commentaire);
         this.setDateProspection(dateProspection);
         this.setInteret(interresse);
-        compteurIdentifiant++;
         Prospects.listeProspects.put(raisonSociale, this);
+        compteurIdentifiant++;
 
     }
 

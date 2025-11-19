@@ -6,6 +6,7 @@ import fr.cda.java.model.liste.Clients;
 import fr.cda.java.model.util.Adresse;
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.platform.commons.util.StringUtils;
 
 /**
  * Client
@@ -18,8 +19,7 @@ import java.util.List;
  */
 public class Client extends Societe {
 
-    private static int compteurIdentifiant = 0;
-    private int identifiant;
+
     long chiffreAffaire;
     int nombreEmployes;
     List<Contrat> listeContrats = new ArrayList<>();
@@ -55,7 +55,6 @@ public class Client extends Societe {
 
         this.chiffreAffaire = chiffreAffaire;
     }
-
     /**
      * @return nombreEmployes description
      */

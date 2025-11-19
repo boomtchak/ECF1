@@ -5,6 +5,8 @@ import fr.cda.java.Exceptions.RegexException;
 import fr.cda.java.model.util.Adresse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -13,6 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource;
  * Le code postal sera vérifié par un Regex (il devra
  * comporter 5 chiffres)
  */
+@TestInstance(Lifecycle.PER_CLASS)
 class AdresseTest {
 
     Adresse instance = new Adresse("4", "rue de Berne", "68000", "COLMAR");

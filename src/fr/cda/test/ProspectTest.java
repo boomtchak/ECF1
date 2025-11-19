@@ -7,16 +7,19 @@ import fr.cda.java.model.util.Adresse;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
  *
  */
+@TestInstance(Lifecycle.PER_CLASS)
 class ProspectTest {
 
     Adresse adresse = new Adresse("4", "rue de Berne", "68000", "COLMAR");
-    Prospect instance = new Prospect("raisonSociale", adresse,
+    Prospect instance = new Prospect("ProspectTest", adresse,
             "0633710842", "nordine.sefroun@laposte.net", "commentaire", LocalDate.now(),
             Interresse.OUI);
 

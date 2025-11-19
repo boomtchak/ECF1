@@ -12,6 +12,8 @@ import fr.cda.java.model.util.Adresse;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -21,19 +23,20 @@ import org.junit.jupiter.params.provider.ValueSource;
  * renseigné et être vérifié par un Regex L’adresse mail devra être renseignée et être vérifiée par
  * un Regex Les commentaires ne seront pas obligatoires
  */
+@TestInstance(Lifecycle.PER_CLASS)
 class SocieteTest {
 
     Adresse adresse = new Adresse("4", "rue de Berne", "68000", "COLMAR");
-    Societe instance = new Societe(1, "raisonSociale", adresse,
+    Societe instance = new Societe(1, "SocieteTest", adresse,
             "0633710842", "nordine.sefroun@laposte.net", "commentaire");
 
 
     @ParameterizedTest(name = "Cas OK")
     @DisplayName("✅ Test de succès pour setRaisonSociale")
-    @ValueSource(strings = {"raisonSociale"})
+    @ValueSource(strings = {"testOk"})
     void setRaisonSocialeOk(String input) {
         Adresse adresse = new Adresse("4", "rue de Berne", "68000", "COLMAR");
-        Client instanceClient = new Client("raisonSociale", adresse,
+        Client instanceClient = new Client("raison Sociale", adresse,
                 "0633710842", "nordine.sefroun@laposte.net", "commentaire",
                 220, 14);
 
@@ -135,7 +138,7 @@ class SocieteTest {
         // un prospect a le meme nom qu'un client.
         assertThrows(UniciteException.class, () -> {
             prospect1.setRaisonSociale("raisonSociale2");
-        }, "Les raisons sociales sont uniques pour tous les types de sociétés. (raisonSociale3)");
+        }, "Les raisons sociales sont uniques pour tous les types de sociétés. (raisonSociale2)");
         // 2 prospects ont le même nom avec un id différent.
         assertThrows(UniciteException.class, () -> {
             prospect2.setRaisonSociale("raisonSociale3");
@@ -143,7 +146,7 @@ class SocieteTest {
         // 1 client et un prospect avec le même id.
         assertThrows(UniciteException.class, () -> {
             prospect2.setRaisonSociale("raisonSociale");
-        }, "Les raisons sociales sont uniques pour tous les types de sociétés. (raisonSociale3)");
+        }, "Les raisons sociales sont uniques pour tous les types de sociétés. (raisonSociale)");
         assertThrows(MandatoryDataException.class, () -> {
             instance.setRaisonSociale("");
         }, "Tous les champs sont obligatoires  : le champs raison sociale n'est pas renseigné");

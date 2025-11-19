@@ -7,6 +7,8 @@ import fr.cda.java.model.gestion.Contrat;
 import fr.cda.java.model.util.Adresse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -15,10 +17,11 @@ import org.junit.jupiter.params.provider.ValueSource;
  * Le nom du contrat devra être saisi
  * Le montant du contrat devra être saisi
  */
+@TestInstance(Lifecycle.PER_CLASS)
 class ContratTest {
 
     Adresse adresse = new Adresse("4", "rue de Berne", "68000", "COLMAR");
-    Client client = new Client("raisonSociale", adresse,
+    Client client = new Client("ContratTest", adresse,
             "0633710842", "nordine.sefroun@laposte.net", "commentaire",
             220, 14);
     Contrat instance = new Contrat(client.getIdentifiant(), "contrat de test", "400");
@@ -75,7 +78,7 @@ class ContratTest {
 
     @Test
     @DisplayName("❌ Test d'échec pour setNomContrat")
-    void setNomContratKo(String input) {
+    void setNomContratKo() {
 
         assertThrows(MandatoryDataException.class, () -> {
             instance.setNomContrat("");

@@ -2,6 +2,7 @@ package fr.cda.java.model.util;
 
 import fr.cda.java.Exceptions.MandatoryDataException;
 import fr.cda.java.Exceptions.RegexException;
+import org.junit.platform.commons.util.StringUtils;
 
 /**
  * Adresse
@@ -58,7 +59,7 @@ public class Adresse {
      */
     public void setNumeroDeRue(String numeroDeRue) {
 
-        if(numeroDeRue == "" || numeroDeRue == null){
+        if(StringUtils.isBlank(numeroDeRue)){
             throw new MandatoryDataException("numero de la rue");
         }
 
@@ -77,7 +78,7 @@ public class Adresse {
      */
     public void setNomDeRue(String nomDeRue) {
 
-        if(nomDeRue == "" || nomDeRue == null){
+        if(StringUtils.isBlank(nomDeRue)){
             throw new MandatoryDataException("nom de la rue");
         }
 
@@ -96,7 +97,7 @@ public class Adresse {
      */
     public void setCodePostal(String codePostal) {
 
-        if(codePostal == "" || codePostal == null){
+        if(StringUtils.isBlank(codePostal)){
             throw new MandatoryDataException("code postal");
         }
         if(!codePostal.matches(Regex.POSTAL_CODE_FR_SIMPLE.getPattern())){
@@ -118,7 +119,7 @@ throw  new RegexException("code postal");
      */
     public void setVille(String ville) {
 
-        if(ville == "" || ville == null){
+        if(StringUtils.isBlank(ville)){
             throw new MandatoryDataException("ville");
         }
 
