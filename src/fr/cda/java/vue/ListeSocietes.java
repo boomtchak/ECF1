@@ -94,7 +94,7 @@ public class ListeSocietes extends JDialog {
             modelTable = new DefaultTableModel(new Object[][]{}, entetes.toArray());
 
             // 4. Parcourir la liste de clients et ajouter chaque ligne
-            for (Client client : Clients.listeClients.values()) {
+            for (Client client : Clients.getListeClients().values()) {
                 Object[] dataRow = new Object[]{
                         client.getIdentifiant(),
                         client.getRaisonSociale(),
@@ -119,7 +119,7 @@ public class ListeSocietes extends JDialog {
              modelTable = new DefaultTableModel(new Object[][]{}, entetes.toArray());
 
             // 4. Parcourir la liste de clients et ajouter chaque ligne
-            for (Prospect prospect : Prospects.listeProspects.values()) {
+            for (Prospect prospect : Prospects.getListeProspect().values()) {
                 Object[] dataRow = new Object[]{
                         prospect.getIdentifiant(),
                         prospect.getRaisonSociale(),

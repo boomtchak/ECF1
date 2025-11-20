@@ -1,6 +1,8 @@
+import fr.cda.java.Logger.AppLogger;
 import fr.cda.java.dao.Dao;
 import fr.cda.java.vue.Acceuil;
 import java.awt.Dimension;
+import java.util.logging.Level;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 
@@ -10,11 +12,13 @@ import java.awt.Dimension;
  * sert de sandbox
  */
 void main() {
+    AppLogger.initFileLogger();
+
     try {
         Dao.charger();
 
     } catch (Exception e) {
-        System.out.println("attention le chargement a fail");
+        AppLogger.LOGGER.severe("le chargement a rencontré un problème non anticipé");
     }
 
     try {
@@ -40,7 +44,7 @@ void main() {
             Dao.sauvegarder();
 
         } catch (IOException e) {
-            System.out.println("attention la sauvegarde a fail");
+            AppLogger.LOGGER.severe("la sauvegarde a rencontré un problème non anticipé");
         }
     }
 }

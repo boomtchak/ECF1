@@ -1,8 +1,7 @@
 package fr.cda.java.Logger;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Formatter;
 import java.util.logging.LogRecord;
 
@@ -19,9 +18,11 @@ public class AppLogFormatter extends Formatter {
 
     @Override
     public String format(LogRecord record) {
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        DateTimeFormatter dateTimeFormatter =
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+
         StringBuilder result = new StringBuilder();
-        result.append(format.format(LocalDate.now()));
+        result.append(dateTimeFormatter.format(LocalDate.now()));
         result.append(" Level : ");
         result.append(record.getLevel());
         result.append(" / Message : ");

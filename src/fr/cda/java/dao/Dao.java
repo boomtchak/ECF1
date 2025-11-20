@@ -1,5 +1,6 @@
 package fr.cda.java.dao;
 
+import fr.cda.java.Logger.AppLogger;
 import fr.cda.java.model.gestion.Client;
 import fr.cda.java.model.gestion.Contrat;
 import fr.cda.java.model.gestion.Prospect;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -63,7 +65,7 @@ public class Dao {
             // Convertit l'objet Java (la liste) en chaîne JSON et l'écrit dans le fichier
             writer.write(son.toString(2));
         } catch (IOException e) {
-            e.printStackTrace();
+            AppLogger.LOGGER.severe("a sauvegarde a rencontré un problème IO voir les droits");
         }
     }
 
@@ -73,7 +75,6 @@ public class Dao {
      */
     public static void charger() {
         verifierRepertoire();
-
         try (FileReader reader = new FileReader("data/db.json")) {
             // 1. Lire le contenu du fichier pour obtenir le JSONObject racine
             JSONTokener tokener = new JSONTokener(reader);
@@ -113,10 +114,7 @@ public class Dao {
 
             System.out.println("voila");
         } catch (IOException e) {
-            System.err.println("❌ Erreur de lecture du fichier : " + e.getMessage());
-            e.printStackTrace();
-        } catch (Exception e) {
-            System.err.println(e.getStackTrace());
+            AppLogger.LOGGER.severe("le chargement a rencontré un problème IO voir les droits");
         }
 
     }

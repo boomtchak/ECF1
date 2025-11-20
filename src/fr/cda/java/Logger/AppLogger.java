@@ -1,5 +1,6 @@
 package fr.cda.java.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -16,6 +17,7 @@ import java.util.logging.Logger;
  */
 public class AppLogger {
 
+    private static final String REPERTOIRE_DATA = "Logs";
     /**
      *
      * Logger principal de l'application
@@ -28,11 +30,23 @@ public class AppLogger {
      */
     private static FileHandler fileHandler = null;
 
+    /**
+     * je ne sais pas si lors de l'integration j'aurais pas des soucis de dossiers existant.
+     */
+    private static void verifierRepertoire() {
+        File dataDir = new File(REPERTOIRE_DATA);
+        if (!dataDir.exists()) {
+            // Crée le répertoire s'il n'existe pas
+            dataDir.mkdirs();
+        }
+    }
+
     // Initialisation du logger
     public static void initFileLogger() {
+        verifierRepertoire();
         try {
             // Création du FileHandler
-            fileHandler = new FileHandler("application.log", true);
+            fileHandler = new FileHandler("Logs/application.log", true);
 
             // Empêche l'affichage du log dans la console
             LOGGER.setUseParentHandlers(false);
