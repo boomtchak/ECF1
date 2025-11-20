@@ -6,9 +6,9 @@ import fr.cda.java.Exceptions.RegexException;
 import fr.cda.java.Exceptions.UniciteException;
 import fr.cda.java.model.gestion.Client;
 import fr.cda.java.model.gestion.Prospect;
-import fr.cda.java.model.gestion.Prospect.Interresse;
 import fr.cda.java.model.gestion.Societe;
 import fr.cda.java.model.util.Adresse;
+import fr.cda.java.model.util.Interet;
 import java.time.LocalDate;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -122,10 +122,10 @@ class SocieteTest {
                 220, 14);
         Prospect prospect1 = new Prospect("raisonSociale3", adresse,
                 "0633710842", "nordine.sefroun@laposte.net", "commentaire", LocalDate.now(),
-                Interresse.OUI);
+                Interet.OUI);
         Prospect prospect2 = new Prospect("raisonSociale4", adresse,
                 "0633710842", "nordine.sefroun@laposte.net", "commentaire", LocalDate.now(),
-                Interresse.OUI);
+                Interet.OUI);
 
         // il faut vérifier, si 2 client on le même nom avec un id différent.
         assertThrows(UniciteException.class, () -> {

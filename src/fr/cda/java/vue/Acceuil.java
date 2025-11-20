@@ -7,7 +7,6 @@ import fr.cda.java.model.gestion.Societe;
 import fr.cda.java.model.util.TypeAction;
 import fr.cda.java.model.util.TypeSociete;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -21,10 +20,12 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 public class Acceuil extends JDialog {
+
 
     private JPanel contentPane;
     private JButton quitterButton;
@@ -43,6 +44,14 @@ public class Acceuil extends JDialog {
     private TypeSociete typeSociete
             = null;
     private Societe selectedSociete;
+
+    /**
+     * @return paneauSociete description
+     */
+    public JPanel getPaneauSociete() {
+        return paneauSociete;
+    }
+
     /**
      * permet de sauvegarder charger
      */
@@ -54,21 +63,7 @@ public class Acceuil extends JDialog {
         setContentPane(contentPane);
         setModal(true);
 
-        // call onCancel() when cross is clicked
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent e) {
-                onCancel();
-            }
-        });
 
-        // call onCancel() on ESCAPE
-        contentPane.registerKeyboardAction(new ActionListener() {
-                                               public void actionPerformed(ActionEvent e) {
-                                                   onCancel();
-                                               }
-                                           }, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-                JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         afficherToutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -83,12 +78,10 @@ public class Acceuil extends JDialog {
              * Quand on clic, on passe en TypeSociete = Client
              */
             public void actionPerformed(ActionEvent e) {
-                //on utilise pas l'enum le gain est minime.
-                description.setText("Gestion des clients");
                 typeSociete = TypeSociete.CLIENT;
-                paneauSociete.setVisible(true);
-                afficherToutButton.setText("Afficher tous les clients");
-                activerBoutonAction();
+                choixTypeSociete();
+
+
             }
         });
         gestionDesProspectsButton.addActionListener(new ActionListener() {
@@ -98,11 +91,9 @@ public class Acceuil extends JDialog {
              * Quand on clic, on passe en TypeSociete = Prospect
              */
             public void actionPerformed(ActionEvent e) {
-                description.setText("Gestion des prospects");
+
                 typeSociete = TypeSociete.PROSPECT;
-                paneauSociete.setVisible(true);
-                afficherToutButton.setText("Afficher tous les prospects");
-                activerBoutonAction();
+                choixTypeSociete();
             }
         });
         selectionSociete.addItemListener(new ItemListener() {
@@ -124,6 +115,12 @@ public class Acceuil extends JDialog {
         quitterButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // add your code here if necessary
+                try{
+                    Dao.sauvegarder();
+                }catch (IOException exception){
+                    System.out.println("erreur sauvegarde");
+                }
                 System.exit(0);
             }
         });
@@ -136,59 +133,96 @@ public class Acceuil extends JDialog {
                 formulaireSociete.setVisible(true);
             }
         });
-    }
-
-    private void onOK() {
-        // add your code here
-        dispose();
-    }
-
-
-    private void onCancel() {
-        // add your code here if necessary
-        dispose();
-    }
-
-    public static void main(String[] args)  {
-        try{
-            dao.charger();
-
-        } catch (Exception e) {
-            System.out.println("attention le chargement a fail");
-        }
-
-        try{
-
-        Acceuil dialog = new Acceuil();
-        Dimension perfectSize = dialog.getSize();
-
-        // 2. On force la fenêtre à ne JAMAIS être plus petite que cette taille
-        dialog.setMinimumSize(perfectSize);
-
-        // 3. (Optionnel) Vous pouvez maintenant cacher votre panneau par défaut
-        // La fenêtre ne rétrécira pas.
-        dialog.pack();
-        dialog.paneauSociete.setVisible(false);
-        dialog.setVisible(true);
-        System.exit(0);
-        }catch (Exception e){
-
-        }finally {
-            try{
-            dao.Sauvegarder();
-
-            } catch (IOException e) {
-                System.out.println("attention la sauvegarde a fail");
+        afficherLesContratsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GestionContrats gestionContrats = new GestionContrats((Client) selectedSociete);
+                gestionContrats.pack();
+                gestionContrats.setVisible(true);
             }
-        }
+        });
+        afficherButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormulaireSociete formulaireSociete = new FormulaireSociete(typeSociete,
+                        TypeAction.AFFICHER, selectedSociete);
+                formulaireSociete.pack();
+                formulaireSociete.setVisible(true);
+            }
+        });
+        modifierButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FormulaireSociete formulaireSociete = new FormulaireSociete(typeSociete,
+                        TypeAction.UPDATE, selectedSociete);
+                formulaireSociete.pack();
+                formulaireSociete.setVisible(true);
+            }
+        });
+        supprimerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int reponse = JOptionPane.showConfirmDialog(null,
+                        new StringBuilder("Etes vous sur de vouloir supprimer le ").append(
+                                        typeSociete.getAffichage()).append(" ")
+                                .append(selectedSociete.getRaisonSociale()).toString(),
+                        new StringBuilder("Suppression de ").append(
+                                selectedSociete.getRaisonSociale()).toString(),
+                        JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (reponse == JOptionPane.YES_OPTION) {
+                    typeSociete.getListeSocietes().remove(selectedSociete.getRaisonSociale());
+                    majListeDeroulante();
+                }
+            }
+        });
     }
+
+
 
     private void activerBoutonAction() {
 
-        boolean estActif = (null != selectionSociete.getSelectedItem());
-// Boucle sur tous les composants DANS le panneau
+        boolean estActif = (null != selectionSociete.getSelectedItem()
+                && selectionSociete.getSelectedIndex() != -1);
+        // Boucle sur tous les composants DANS le panneau
         for (Component comp : paneauActionsOnSelection.getComponents()) {
-            comp.setEnabled(estActif);
+                comp.setEnabled(estActif);
+        }
+
+
+    }
+
+    /**
+     * permet de contextualiser l'écran en fonction du type de société
+     * <p>
+     * on travail en générique / objet pour detourner les incompatibilités de type
+     */
+    private void choixTypeSociete() {
+
+        description.setText(
+                new StringBuilder("Gestion des ").append(typeSociete.getAffichage()).toString());
+        paneauSociete.setVisible(true);
+        afficherToutButton.setText(
+                new StringBuilder("Afficher tous les ").append(typeSociete.getAffichage())
+                        .toString());
+        afficherLesContratsButton.setVisible(typeSociete.equals(TypeSociete.CLIENT));
+        majListeDeroulante();
+
+        activerBoutonAction();
+    }
+
+    private void majListeDeroulante() {
+        selectionSociete.removeAllItems();
+
+        if (typeSociete.getListeSocietes().isEmpty()) {
+            selectionSociete.setEnabled(false);
+        } else {
+            selectionSociete.setEnabled(true);
+            for (Object societe : typeSociete.getListeSocietes().values()) {
+                selectionSociete.addItem(societe);
+
+            }
+            // -1 signifie "aucune sélection"
+            selectionSociete.setSelectedIndex(-1);
         }
     }
 }

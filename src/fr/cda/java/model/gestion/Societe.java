@@ -2,12 +2,8 @@ package fr.cda.java.model.gestion;
 
 import fr.cda.java.Exceptions.MandatoryDataException;
 import fr.cda.java.Exceptions.RegexException;
-import fr.cda.java.Exceptions.UniciteException;
-import fr.cda.java.model.liste.Clients;
-import fr.cda.java.model.liste.Prospects;
 import fr.cda.java.model.util.Adresse;
 import fr.cda.java.model.util.Regex;
-import java.util.GregorianCalendar;
 import org.junit.platform.commons.util.StringUtils;
 
 /**
@@ -29,13 +25,12 @@ public class Societe {
     private String adresseMail;
     private String commentaire;
 
-    public Societe(int identifiant,  Adresse adresse, String telephone,
+    public Societe(Adresse adresse, String telephone,
             String adresseMail, String commentaire) {
         this.setAdresse(adresse);
         this.setTelephone(telephone);
         this.setAdresseMail(adresseMail);
         this.setCommentaire(commentaire);
-        this.setIdentifiant(identifiant);
     }
 
     /**
@@ -52,7 +47,6 @@ public class Societe {
     public int getIdentifiant() {
         return identifiant;
     }
-
 
 
     /**
@@ -103,7 +97,7 @@ public class Societe {
         if (StringUtils.isBlank(telephone)) {
             throw new MandatoryDataException("téléphone");
         }
-        if(!telephone.matches(Regex.PHONE_FR_SIMPLE.getPattern())){
+        if (!telephone.matches(Regex.PHONE_FR_SIMPLE.getPattern())) {
             throw new RegexException("téléphone");
         }
 
@@ -125,7 +119,7 @@ public class Societe {
         if (StringUtils.isBlank(adresseMail)) {
             throw new MandatoryDataException("adresse mail");
         }
-        if(!adresseMail.matches(Regex.EMAIL.getPattern())){
+        if (!adresseMail.matches(Regex.EMAIL.getPattern())) {
             throw new RegexException("adresse mail");
         }
 
@@ -149,5 +143,10 @@ public class Societe {
         }
 
         this.commentaire = commentaire;
+    }
+
+    @Override
+    public String toString() {
+        return raisonSociale;
     }
 }

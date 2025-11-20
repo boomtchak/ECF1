@@ -6,6 +6,8 @@ import fr.cda.java.model.gestion.Prospect;
 import fr.cda.java.model.liste.Clients;
 import fr.cda.java.model.liste.Prospects;
 import fr.cda.java.model.util.TypeSociete;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -33,10 +35,13 @@ public class ListeSocietes extends JDialog {
     public ListeSocietes(TypeSociete typeSociete) {
         this.typeSociete = typeSociete;
         this.setTitle(new StringBuilder("Liste des ").append(typeSociete.toString()).toString());
+        // Obtenir les dimensions de l'écran principal
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        remplissageJTable();
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
-        remplissageJTable();
+        this.pack();
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -148,4 +153,5 @@ public class ListeSocietes extends JDialog {
         // add your code here if necessary
         dispose();
     }
+
 }

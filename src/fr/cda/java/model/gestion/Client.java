@@ -21,7 +21,6 @@ import org.json.JSONObject;
  */
 public class Client extends Societe {
 
-    private static int compteurIdentifiant = 1;
     long chiffreAffaire;
     int nombreEmployes;
     List<Contrat> listeContrats = new ArrayList<>();
@@ -29,12 +28,10 @@ public class Client extends Societe {
     public Client(String raisonSociale, Adresse adresse, String telephone, String adresseMail,
             String commentaire, long chiffreAffaire, int nombreEmployes) {
 
-        super(compteurIdentifiant, adresse, telephone, adresseMail, commentaire);
+        super(adresse, telephone, adresseMail, commentaire);
         this.setChiffreAffaire(chiffreAffaire);
         this.setNombreEmployes(nombreEmployes);
         this.setRaisonSociale(raisonSociale);
-        Clients.listeClients.put(raisonSociale, this);
-        compteurIdentifiant++;
     }
 
     /**
@@ -45,17 +42,13 @@ public class Client extends Societe {
      */
     public Client(JSONObject json) {
 
-        super(json.getInt("identifiant"),
+        this(json.getString("raisonSociale"),
                 new Adresse(json.getJSONObject("adresse")),
                 json.getString("telephone"),
                 json.getString("adresseMail"),
-                json.getString("commentaire")
-        );
-        this.setChiffreAffaire(json.getLong("chiffreAffaire"));
-        this.setRaisonSociale(json.getString("raisonSociale"));
-        this.setNombreEmployes(json.getInt("nombreEmployes"));
-        Clients.listeClients.put(json.getString("raisonSociale"), this);
-        compteurIdentifiant++;
+                json.getString("commentaire"),
+                json.getLong("chiffreAffaire"),
+                json.getInt("nombreEmployes"));
     }
 
     /**
@@ -113,9 +106,9 @@ public class Client extends Societe {
         /**
          * si la raison sociale existe déjà, on s'assure qu'il s'agit pas de l'objet en cours de traitement
          */
-        if (Prospects.listeProspects.containsKey(raisonSociale)
-                || (Clients.listeClients.containsKey(raisonSociale)
-                && Clients.listeClients.get(raisonSociale).getIdentifiant()
+        if (Prospects.getListeProspect().containsKey(raisonSociale)
+                || (Clients.getListeClients().containsKey(raisonSociale)
+                && Clients.getListeClients().get(raisonSociale).getIdentifiant()
                 != this.getIdentifiant())) {
             throw new UniciteException(raisonSociale);
         }

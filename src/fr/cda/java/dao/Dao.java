@@ -10,12 +10,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONParserConfiguration;
 import org.json.JSONTokener;
 
 /**
@@ -51,12 +49,19 @@ public class Dao {
      *
      * @throws IOException
      */
-    public void Sauvegarder() throws IOException {
+    public static void sauvegarder() throws IOException {
         verifierRepertoire();
-        JSONObject sonClient = new JSONObject(Clients.listeClients);
+        HashMap<String, JSONArray> listeComplete = new HashMap<String, JSONArray>();
+        JSONArray jsonArrayC = new JSONArray(Clients.getListeClients().values());
+        JSONArray jsonArrayP = new JSONArray(Prospects.getListeProspect().values());
+
+        listeComplete.put("clients", jsonArrayC);
+        listeComplete.put("prospects", jsonArrayP);
+
+        JSONObject son = new JSONObject(listeComplete);
         try (FileWriter writer = new FileWriter(FICHIER_DB)) {
             // Convertit l'objet Java (la liste) en chaîne JSON et l'écrit dans le fichier
-            writer.write(sonClient.toString());
+            writer.write(son.toString(2));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,7 +71,7 @@ public class Dao {
      * ca charge une liste de contrat que ca index par id client. ensuite, quand on chargera les
      * clients, on aura plus qu'à setter leur liste contrats.
      */
-    public void charger() {
+    public static void charger() {
         verifierRepertoire();
 
         try (FileReader reader = new FileReader("data/db.json")) {
@@ -90,8 +95,8 @@ public class Dao {
                             listeContrats.add(contrat);
                         }
                     }
-                    Clients.listeClients.get(client.getRaisonSociale())
-                            .setListeContrats(listeContrats);
+                    client.setListeContrats(listeContrats);
+                    Clients.ajouter(client);
                 }
             }
             if (!json.has("prospects")) {
@@ -102,6 +107,7 @@ public class Dao {
                 for (int i = 0; i < listeProspects.length(); i++) {
                     JSONObject prospectJson = listeProspects.getJSONObject(i);
                     Prospect prospect = new Prospect(prospectJson);
+                    Prospects.ajouter(prospect);
                 }
             }
 

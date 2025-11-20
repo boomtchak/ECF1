@@ -1,12 +1,10 @@
 package fr.cda.java.model.gestion;
 
-import fr.cda.java.Exceptions.RegexException;
 import fr.cda.java.Exceptions.UniciteException;
 import fr.cda.java.model.liste.Clients;
 import fr.cda.java.model.liste.Prospects;
 import fr.cda.java.model.util.Adresse;
 import fr.cda.java.model.util.Interet;
-import fr.cda.java.model.util.Regex;
 import java.time.LocalDate;
 import org.json.JSONObject;
 
@@ -20,52 +18,29 @@ import org.json.JSONObject;
  * @since 05/11/2025
  */
 public class Prospect extends Societe {
-    private static int compteurIdentifiant = 1;
     private LocalDate dateProspection;
-    private Interresse interet;
-
-    public static enum Interresse {
-        OUI("est interessé"),
-        NON("n'est pas interressé"),
-        INCONNU("");
-
-        private final String description;
-
-        Interresse(String description) {
-            this.description = description;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-    }
+    private Interet interet;
 
     public Prospect(String raisonSociale, Adresse adresse, String telephone,
-            String adresseMail, String commentaire, LocalDate dateProspection, Interresse interresse) {
-        super(compteurIdentifiant, adresse, telephone, adresseMail, commentaire);
+            String adresseMail, String commentaire, LocalDate dateProspection, Interet interet) {
+        super(adresse, telephone, adresseMail, commentaire);
         this.setDateProspection(dateProspection);
-        this.setInteret(interresse);
+        this.setInteret(interet);
         this.setRaisonSociale(raisonSociale);
-        Prospects.listeProspects.put(raisonSociale, this);
-        compteurIdentifiant++;
 
 
     }
 
     public Prospect(JSONObject json) {
-        super(json.getInt("identifiant"),
+        String dateStr = json.getString("dateProspection");
+        LocalDate date = LocalDate.parse(dateStr); // format ISO yyyy-MM-dd
+        this(json.getString("raisonSociale"),
                 new Adresse(json.getJSONObject("adresse")),
                 json.getString("telephone"),
                 json.getString("adresseMail"),
-                json.getString("commentaire")
-        );
-        String dateStr = json.getString("dateProspection");
-        LocalDate date = LocalDate.parse(dateStr); // format ISO yyyy-MM-dd
-        this.setDateProspection(date);
-        this.setInteret(Interresse.valueOf(json.getString("interet")));
-        this.setRaisonSociale(json.getString("raisonSociale"));
-        Prospects.listeProspects.put(json.getString("raisonSociale"), this);
-        compteurIdentifiant++;
+                json.getString("commentaire"),
+                date,
+                Interet.valueOf(json.getString("interet")));
 
     }
 
@@ -86,17 +61,17 @@ public class Prospect extends Societe {
     /**
      * @return interet description
      */
-    public Interresse getInteret() {
+    public Interet getInteret() {
         return interet;
     }
 
     /**
      * @param interet description
      */
-    public void setInteret(Interresse interet) {
+    public void setInteret(Interet interet) {
 
         if (interet == null) {
-            interet= Interresse.INCONNU;
+            interet = Interet.INCONNU;
         }
 
         this.interet = interet;
@@ -107,9 +82,9 @@ public class Prospect extends Societe {
         /**
          * si la raison sociale existe déjà, on s'assure qu'il s'agit pas de l'objet en cours de traitement
          */
-        if (Clients.listeClients.containsKey(raisonSociale)
-                || (Prospects.listeProspects.containsKey(raisonSociale)
-                && Prospects.listeProspects.get(raisonSociale).getIdentifiant()
+        if (Clients.getListeClients().containsKey(raisonSociale)
+                || (Prospects.getListeProspect().containsKey(raisonSociale)
+                && Prospects.getListeProspect().get(raisonSociale).getIdentifiant()
                 != this.getIdentifiant())) {
             throw new UniciteException(raisonSociale);
         }

@@ -15,6 +15,7 @@ import org.junit.platform.commons.util.StringUtils;
  * @since 05/11/2025
  */
 public class Adresse {
+
     private static int compteurIdentifiant = 1;
     private static int identifiant;
     private String numeroDeRue;
@@ -32,14 +33,10 @@ public class Adresse {
         this.setVille(ville);
         compteurIdentifiant++;
     }
-    public Adresse(JSONObject json) {
-        this.setIdentifiant(json.getInt("identifiant"));
 
-        this.setNumeroDeRue(json.getString("numeroDeRue"));
-        this.setNomDeRue(json.getString("nomDeRue"));
-        this.setCodePostal(json.getString("codePostal"));
-        this.setVille(json.getString("ville"));
-        compteurIdentifiant++;
+    public Adresse(JSONObject json) {
+        this(json.getString("numeroDeRue") , json.getString("nomDeRue"),
+                json.getString("codePostal"), json.getString("ville"));
     }
 
     /**
@@ -53,7 +50,6 @@ public class Adresse {
      * @param identifiant description
      */
     public void setIdentifiant(int identifiant) {
-
 
         this.identifiant = identifiant;
     }
@@ -70,7 +66,7 @@ public class Adresse {
      */
     public void setNumeroDeRue(String numeroDeRue) {
 
-        if(StringUtils.isBlank(numeroDeRue)){
+        if (StringUtils.isBlank(numeroDeRue)) {
             throw new MandatoryDataException("numero de la rue");
         }
 
@@ -89,7 +85,7 @@ public class Adresse {
      */
     public void setNomDeRue(String nomDeRue) {
 
-        if(StringUtils.isBlank(nomDeRue)){
+        if (StringUtils.isBlank(nomDeRue)) {
             throw new MandatoryDataException("nom de la rue");
         }
 
@@ -108,11 +104,11 @@ public class Adresse {
      */
     public void setCodePostal(String codePostal) {
 
-        if(StringUtils.isBlank(codePostal)){
+        if (StringUtils.isBlank(codePostal)) {
             throw new MandatoryDataException("code postal");
         }
-        if(!codePostal.matches(Regex.POSTAL_CODE_FR_SIMPLE.getPattern())){
-throw  new RegexException("code postal");
+        if (!codePostal.matches(Regex.POSTAL_CODE_FR_SIMPLE.getPattern())) {
+            throw new RegexException("code postal");
         }
 
         this.codePostal = codePostal;
@@ -130,10 +126,22 @@ throw  new RegexException("code postal");
      */
     public void setVille(String ville) {
 
-        if(StringUtils.isBlank(ville)){
+        if (StringUtils.isBlank(ville)) {
             throw new MandatoryDataException("ville");
         }
 
         this.ville = ville;
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder(numeroDeRue)
+                .append(", ")
+                .append(nomDeRue)
+                .append(" ")
+                .append(codePostal)
+                .append(" ")
+                .append(ville);
+        return sb.toString();
+    }
+
 }

@@ -1,10 +1,14 @@
 package fr.cda.java.vue;
 
+import fr.cda.java.model.gestion.Client;
+import fr.cda.java.model.gestion.Contrat;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -28,9 +32,20 @@ public class GestionContrats extends JDialog {
     private JButton supprimerButton;
     private JButton modifierButton;
     private JButton sauvegarderButton;
+    private JPanel blocFormulaire;
+    private JButton nouveauButton;
+    private Client client;
 
-    public GestionContrats() {
+    public GestionContrats(Client client) {
+        this(client, false);
+    }
+
+    public GestionContrats(Client client, boolean isAffichage) {
+        this.client = client;
         this.setTitle("Gestion des contrats");
+        blocFormulaire.setVisible(!isAffichage);
+        sauvegarderButton.setVisible(!isAffichage);
+            remplissageJTable();
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
@@ -76,17 +91,29 @@ public class GestionContrats extends JDialog {
 
 
     private void remplissageJTable() {
-        DefaultTableModel modelTable ;
-        String[] entete;
-        entete = new String[] {"1", "2", "3"};
-        modelTable = new DefaultTableModel(new Object[][]{}, entete);
-        modelTable.addRow(entete);
-        for (int i= 1; i <4; i++)
-            modelTable.addRow(new Object[] {
-                    "d",
-                    10,
-                    "f"
-            });
+        DefaultTableModel modelTable = null;
+        // 2. Définir les en-têtes
+        List<String> entetes = new ArrayList<>();
+        entetes.add("Identifiant");
+        entetes.add("Client");
+        entetes.add("Nom");
+        entetes.add("Montant");
+
+        // 3. Initialiser le DefaultTableModel (avec 0 ligne au départ)
+        modelTable = new DefaultTableModel(new Object[][]{}, entetes.toArray());
+
+        // 4. Parcourir la liste de clients et ajouter chaque ligne
+        for (Contrat contrat : client.getListeContrats()) {
+            Object[] dataRow = new Object[]{
+                    contrat.getIdentifiant(),
+                    client.getRaisonSociale(),
+                    contrat.getNomContrat(),
+                    contrat.getMontantContrat()
+            };
+            modelTable.addRow(dataRow);
+        }
+
+        // 5. Appliquer le modèle à la table
         tableauContrats.setModel(modelTable);
     }
 
