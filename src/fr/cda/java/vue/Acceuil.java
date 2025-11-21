@@ -11,18 +11,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 
 public class Acceuil extends JDialog {
 
@@ -62,7 +57,6 @@ public class Acceuil extends JDialog {
         this.setTitle("Menu principal");
         setContentPane(contentPane);
         setModal(true);
-
 
         afficherToutButton.addActionListener(new ActionListener() {
             @Override
@@ -131,6 +125,7 @@ public class Acceuil extends JDialog {
                         TypeAction.CREATE);
                 formulaireSociete.pack();
                 formulaireSociete.setVisible(true);
+                majListeDeroulante();
             }
         });
         afficherLesContratsButton.addActionListener(new ActionListener() {
@@ -157,6 +152,7 @@ public class Acceuil extends JDialog {
                         TypeAction.UPDATE, selectedSociete);
                 formulaireSociete.pack();
                 formulaireSociete.setVisible(true);
+                majListeDeroulante();
             }
         });
         supprimerButton.addActionListener(new ActionListener() {
@@ -170,7 +166,7 @@ public class Acceuil extends JDialog {
                                 selectedSociete.getRaisonSociale()).toString(),
                         JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (reponse == JOptionPane.YES_OPTION) {
-                    typeSociete.getListeSocietes().remove(selectedSociete.getRaisonSociale());
+                    typeSociete.getListe().supprimer(selectedSociete.getRaisonSociale());
                     majListeDeroulante();
                 }
             }
@@ -213,11 +209,11 @@ public class Acceuil extends JDialog {
     private void majListeDeroulante() {
         selectionSociete.removeAllItems();
 
-        if (typeSociete.getListeSocietes().isEmpty()) {
+        if (typeSociete.getListe().getListeSocietes().isEmpty()) {
             selectionSociete.setEnabled(false);
         } else {
             selectionSociete.setEnabled(true);
-            for (Object societe : typeSociete.getListeSocietes().values()) {
+            for (Object societe : typeSociete.getListe().getListeSocietes().values()) {
                 selectionSociete.addItem(societe);
 
             }

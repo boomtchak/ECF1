@@ -33,6 +33,14 @@ public class Client extends Societe {
         this.setNombreEmployes(nombreEmployes);
         this.setRaisonSociale(raisonSociale);
     }
+    public Client(Societe societe, long chiffreAffaire, int nombreEmployes, String raisonSociale) {
+
+        super(societe);
+        this.setChiffreAffaire(chiffreAffaire);
+        this.setNombreEmployes(nombreEmployes);
+        this.setRaisonSociale(raisonSociale);
+
+    }
 
     /**
      * C'est plus safe pour anticiper les données corrompues en json de passer par ici et utiliser
@@ -106,9 +114,9 @@ public class Client extends Societe {
         /**
          * si la raison sociale existe déjà, on s'assure qu'il s'agit pas de l'objet en cours de traitement
          */
-        if (Prospects.getListeProspect().containsKey(raisonSociale)
-                || (Clients.getListeClients().containsKey(raisonSociale)
-                && Clients.getListeClients().get(raisonSociale).getIdentifiant()
+        if (Prospects.getInstance().getListeSocietes().containsKey(raisonSociale)
+                || (Clients.getInstance().getListeSocietes().containsKey(raisonSociale)
+                && Clients.getInstance().getListeSocietes().get(raisonSociale).getIdentifiant()
                 != this.getIdentifiant())) {
             throw new UniciteException(raisonSociale);
         }

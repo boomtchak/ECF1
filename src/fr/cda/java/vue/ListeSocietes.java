@@ -35,12 +35,11 @@ public class ListeSocietes extends JDialog {
     public ListeSocietes(TypeSociete typeSociete) {
         this.typeSociete = typeSociete;
         this.setTitle(new StringBuilder("Liste des ").append(typeSociete.toString()).toString());
-        // Obtenir les dimensions de l'écran principal
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         remplissageJTable();
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
+        redimensionner();
         this.pack();
 
         buttonOK.addActionListener(new ActionListener() {
@@ -87,17 +86,14 @@ public class ListeSocietes extends JDialog {
             entetes.add("Chiffre d'Affaires");
             entetes.add("Nb Employés");
             // en général c'est en fin de tableau.
-        entetes.add("commentaire;");
-
+            entetes.add("commentaire;");
 
             // 3. Initialiser le DefaultTableModel (avec 0 ligne au départ)
             modelTable = new DefaultTableModel(new Object[][]{}, entetes.toArray());
 
             // 4. Parcourir la liste de clients et ajouter chaque ligne
-            for (Client client : Clients.getListeClients().values()) {
-                Object[] dataRow = new Object[]{
-                        client.getIdentifiant(),
-                        client.getRaisonSociale(),
+            for (Client client : Clients.getInstance().getListeSocietes().values()) {
+                Object[] dataRow = new Object[]{client.getIdentifiant(), client.getRaisonSociale(),
                         client.getAdresse().toString(), // Long
                         client.getTelephone(), // Long
                         client.getAdresseMail(), // Long
@@ -116,14 +112,12 @@ public class ListeSocietes extends JDialog {
             entetes.add("commentaire;");
 
             // 3. Initialiser le DefaultTableModel (avec 0 ligne au départ)
-             modelTable = new DefaultTableModel(new Object[][]{}, entetes.toArray());
+            modelTable = new DefaultTableModel(new Object[][]{}, entetes.toArray());
 
             // 4. Parcourir la liste de clients et ajouter chaque ligne
-            for (Prospect prospect : Prospects.getListeProspect().values()) {
-                Object[] dataRow = new Object[]{
-                        prospect.getIdentifiant(),
-                        prospect.getRaisonSociale(),
-                        prospect.getAdresse().toString(), // Long
+            for (Prospect prospect : Prospects.getInstance().getListeSocietes().values()) {
+                Object[] dataRow = new Object[]{prospect.getIdentifiant(),
+                        prospect.getRaisonSociale(), prospect.getAdresse().toString(), // Long
                         prospect.getTelephone(), // Long
                         prospect.getDateProspection(), // Long
                         prospect.getInteret(), // int
@@ -135,12 +129,19 @@ public class ListeSocietes extends JDialog {
             //ca peut arriver dans des tests de robustesse, ca me permettra de savoir que ca s'est passé.
             System.out.println(
                     "le TypeSociete n'était pas initialisé dans l'écran des listes, ca n'est pas sensé être possible");
-            throw new donneeException(
-                    "le TypeSociete ne s'est pas correctement initialisé.");
+            throw new donneeException("le TypeSociete ne s'est pas correctement initialisé.");
         }
 
         // 5. Appliquer le modèle à la table
         tableau.setModel(modelTable);
+    }
+
+    private void redimensionner() {
+        Dimension tailleEcran = Toolkit.getDefaultToolkit().getScreenSize();
+        // Le (int) est obligatoire pour convertir le résultat à virgule en entier
+        contentPane.setPreferredSize(
+                new Dimension((int) (tailleEcran.width * 0.6), (int) (tailleEcran.height * 0.3)));
+
     }
 
 

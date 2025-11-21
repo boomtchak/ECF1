@@ -15,7 +15,7 @@ import org.junit.platform.commons.util.StringUtils;
  */
 public class Contrat {
 
-    private static int compteurIdentifiant = 1;
+    public static int compteurIdentifiant = 1;
     private int identifiant;
     private int identifiantClient;
     private String nomContrat;
@@ -88,6 +88,7 @@ public class Contrat {
         }
 
         this.nomContrat = nomContrat;
+
     }
 
     /**

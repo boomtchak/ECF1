@@ -21,14 +21,20 @@ public class Prospect extends Societe {
     private LocalDate dateProspection;
     private Interet interet;
 
+    public Prospect(Societe societe, LocalDate dateProspection, Interet interet, String raisonSociale) {
+        super(societe);
+        this.setDateProspection(dateProspection);
+        this.setInteret(interet);
+        this.setRaisonSociale(raisonSociale);
+
+
+    }
     public Prospect(String raisonSociale, Adresse adresse, String telephone,
             String adresseMail, String commentaire, LocalDate dateProspection, Interet interet) {
         super(adresse, telephone, adresseMail, commentaire);
         this.setDateProspection(dateProspection);
         this.setInteret(interet);
         this.setRaisonSociale(raisonSociale);
-
-
     }
 
     public Prospect(JSONObject json) {
@@ -82,9 +88,9 @@ public class Prospect extends Societe {
         /**
          * si la raison sociale existe déjà, on s'assure qu'il s'agit pas de l'objet en cours de traitement
          */
-        if (Clients.getListeClients().containsKey(raisonSociale)
-                || (Prospects.getListeProspect().containsKey(raisonSociale)
-                && Prospects.getListeProspect().get(raisonSociale).getIdentifiant()
+        if (Clients.getInstance().getListeSocietes().containsKey(raisonSociale)
+                || (Prospects.getInstance().getListeSocietes().containsKey(raisonSociale)
+                && Prospects.getInstance().getListeSocietes().get(raisonSociale).getIdentifiant()
                 != this.getIdentifiant())) {
             throw new UniciteException(raisonSociale);
         }

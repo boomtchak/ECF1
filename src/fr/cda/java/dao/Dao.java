@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -54,8 +53,8 @@ public class Dao {
     public static void sauvegarder() throws IOException {
         verifierRepertoire();
         HashMap<String, JSONArray> listeComplete = new HashMap<String, JSONArray>();
-        JSONArray jsonArrayC = new JSONArray(Clients.getListeClients().values());
-        JSONArray jsonArrayP = new JSONArray(Prospects.getListeProspect().values());
+        JSONArray jsonArrayC = new JSONArray(Clients.getInstance().getListeSocietes().values());
+        JSONArray jsonArrayP = new JSONArray(Prospects.getInstance().getListeSocietes().values());
 
         listeComplete.put("clients", jsonArrayC);
         listeComplete.put("prospects", jsonArrayP);
@@ -97,7 +96,7 @@ public class Dao {
                         }
                     }
                     client.setListeContrats(listeContrats);
-                    Clients.ajouter(client);
+                    Clients.getInstance().ajouter(client);
                 }
             }
             if (!json.has("prospects")) {
@@ -108,7 +107,7 @@ public class Dao {
                 for (int i = 0; i < listeProspects.length(); i++) {
                     JSONObject prospectJson = listeProspects.getJSONObject(i);
                     Prospect prospect = new Prospect(prospectJson);
-                    Prospects.ajouter(prospect);
+                    Prospects.getInstance().ajouter(prospect);
                 }
             }
 

@@ -33,6 +33,13 @@ public class Societe {
         this.setCommentaire(commentaire);
     }
 
+    public Societe(Societe societe) {
+        this(societe.getAdresse(),
+                societe.getTelephone(),
+                societe.getAdresseMail(),
+                societe.getCommentaire());
+    }
+
     /**
      * @param identifiant description
      */

@@ -1,38 +1,31 @@
 package fr.cda.java.model.util;
 
 import fr.cda.java.model.liste.Clients;
+import fr.cda.java.model.liste.Lister;
 import fr.cda.java.model.liste.Prospects;
-import java.util.TreeMap;
 
 public enum TypeSociete {
     // Les différentes valeurs possibles
-    CLIENT("client", Clients.getListeClients()),
-    PROSPECT("prospect", Prospects.getListeProspect());
+    CLIENT("client", Clients.getInstance()),
+    PROSPECT("prospect", Prospects.getInstance());
 
 
     // Un champ pour stocker le nom "propre"
     private final String affichage;
     // Un champ pour stocker la liste de sociétés
-    private final TreeMap listeSocietes;
+    private final Lister liste;
 
     // Le constructeur (toujours privé pour une enum)
-    TypeSociete(String affichage, TreeMap listeSocietes1) {
+    TypeSociete(String affichage, Lister liste) {
         this.affichage = affichage;
-        this.listeSocietes = listeSocietes1;
+        this.liste = liste;
     }
 
     /**
-     * @return listeSocietes description
+     * @return liste description
      */
-    public TreeMap getListeSocietes() {
-        return listeSocietes;
-    }
-
-    /**
-     * @return listeSocietes description
-     */
-    public TreeMap ListeSocietes() {
-        return listeSocietes;
+    public Lister getListe() {
+        return liste;
     }
 
     /**

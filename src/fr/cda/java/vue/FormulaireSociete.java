@@ -1,13 +1,12 @@
 package fr.cda.java.vue;
 
+import fr.cda.java.Exceptions.AffichageException;
 import fr.cda.java.Exceptions.MandatoryDataException;
 import fr.cda.java.Exceptions.RegexException;
 import fr.cda.java.Exceptions.UniciteException;
-import fr.cda.java.Logger.AppLogger;
 import fr.cda.java.model.gestion.Client;
 import fr.cda.java.model.gestion.Prospect;
 import fr.cda.java.model.gestion.Societe;
-import fr.cda.java.model.liste.Clients;
 import fr.cda.java.model.util.Adresse;
 import fr.cda.java.model.util.Interet;
 import fr.cda.java.model.util.TypeAction;
@@ -17,9 +16,10 @@ import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.logging.Level;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,13 +29,13 @@ import javax.swing.JTextField;
 public class FormulaireSociete extends JDialog {
 
     private JPanel contentPane;
-    private JButton buttonOK;
-    private JButton buttonCancel;
-    private JTextArea comTextField;
-    private JPanel paneauProspect;
-    private JPanel paneauClient;
     private JPanel erreur;
-    private JComboBox interetCombo;
+    private JPanel blocFormulaireComplet;
+    private JPanel panneauProspect;
+    private JPanel panneauClient;
+    private JLabel erreurLabel;
+    private JTextField idTextField;
+    private JTextField raisonSocialeTextField;
     private JTextField numRueTextField;
     private JTextField nomRueTextField;
     private JTextField cpTextField;
@@ -44,12 +44,14 @@ public class FormulaireSociete extends JDialog {
     private JTextField mailTextField;
     private JTextField nbEmployeTextField;
     private JTextField chiffreAffaireTextField;
-    private JTextField raisonSocialeTextField;
-    private JTextField idTextField;
+    private JTextField dateProspectTextField;
+    private JComboBox interetCombo;
+    private JTextArea comTextField;
     private JButton voirLesContratsButton;
-    private JPanel blocFormulaireComplet;
-    private JTextField dateProspecTextField;
-    private JLabel erreurLabel;
+    private JButton buttonOK;
+    private JButton buttonCancel;
+    ArrayList<JComponent> listeChampsFormulaire = new ArrayList<JComponent>();
+
     TypeSociete typeSociete;
     TypeAction typeAction;
     Societe societe;
@@ -65,6 +67,7 @@ public class FormulaireSociete extends JDialog {
         this.setTitle(new StringBuilder(typeAction.toString()).append(typeSociete.getAffichage())
                 .toString());
         voirLesContratsButton.setVisible(!typeAction.equals(TypeAction.CREATE));
+        creerListeComposants();
         if (typeSociete.equals(TypeSociete.PROSPECT)) {
             voirLesContratsButton.setVisible(false);
             for (Interet interet : Interet.values()) {
@@ -76,14 +79,15 @@ public class FormulaireSociete extends JDialog {
             bindingSetters();
         } else {
             interetCombo.setSelectedItem(Interet.INCONNU);
+            idTextField.setText(String.valueOf(typeSociete.getListe().getCompteurIdentifiant()));
         }
         setContentPane(contentPane);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
         this.setTitle(
-                new StringBuilder(typeAction.toString()).append(typeSociete.toString()).toString());
-        paneauProspect.setVisible(typeSociete.equals(TypeSociete.PROSPECT));
-        paneauClient.setVisible(typeSociete.equals(TypeSociete.CLIENT));
+                new StringBuilder(typeAction.toString()).append(typeSociete).toString());
+        panneauProspect.setVisible(typeSociete.equals(TypeSociete.PROSPECT));
+        panneauClient.setVisible(typeSociete.equals(TypeSociete.CLIENT));
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -110,79 +114,110 @@ public class FormulaireSociete extends JDialog {
         });
     }
 
+
+    private void creerListeComposants() {
+        listeChampsFormulaire.add(dateProspectTextField);
+        listeChampsFormulaire.add(interetCombo);
+        listeChampsFormulaire.add(numRueTextField);
+        listeChampsFormulaire.add(nomRueTextField);
+        listeChampsFormulaire.add(cpTextField);
+        listeChampsFormulaire.add(villeTextField);
+        listeChampsFormulaire.add(telTextField);
+        listeChampsFormulaire.add(mailTextField);
+        listeChampsFormulaire.add(nbEmployeTextField);
+        listeChampsFormulaire.add(chiffreAffaireTextField);
+        listeChampsFormulaire.add(raisonSocialeTextField);
+        listeChampsFormulaire.add(comTextField);
+    }
+
     /**
-     * sauvegarde. peut être amélioré.
+     * sauvegarde. et affiche les erreurs.
      */
     private void onOK() {
-        String erreurDetectee = "";
-        LocalDate date = null;
-        Long chiffreAffaire;
-        int nbEmploye;
-        // ce sont des regles d'affichage, pas des regles métier.
-        try {
-            chiffreAffaire = Long.parseLong(chiffreAffaireTextField.getText());
-        } catch (NumberFormatException e) {
-            nbEmploye = Integer.parseInt(nbEmployeTextField.getText());
-            erreurDetectee = "Le nombre d'employés doit être un chiffre";
-        }
-        try {
-        } catch (NumberFormatException e) {
-            erreurDetectee = "Le chiffre d'affaire doit être un chiffre";
-        }
-        try {
-            date = LocalDate.parse(dateProspecTextField.getText(),
-                    DateTimeFormatter.ofPattern("dd/MM/uuuu"));
-        } catch (DateTimeParseException e) {
-            erreurDetectee = "La date affichee ne respecte pas les standards (JJ/MM/AAAA)";
-        }
 
-        if (erreurDetectee.isEmpty()) {
-            try {
-                if (typeSociete.equals(TypeSociete.PROSPECT)) {
-                    Prospect prospect = (Prospect) getSociete();
-
-                    prospect.setRaisonSociale(raisonSocialeTextField.getText());
-                    prospect.setDateProspection(date);
-                    prospect.setInteret((Interet) interetCombo.getSelectedItem());
-                    if (typeAction.equals(TypeAction.UPDATE)) {
-
-                        typeSociete.getListeSocietes()
-                                .replace(societe.getRaisonSociale(), prospect);
-                    } else {
-                        prospect.setIdentifiant(societe.getIdentifiant());
-                        typeSociete.getListeSocietes().put(societe.getRaisonSociale(), prospect);
-                    }
+        try {
+            if (typeSociete.equals(TypeSociete.PROSPECT)) {
+                Prospect prospect = new Prospect(getSociete(),
+                        (LocalDate) validerReglesAffichage("dateProspect"),
+                        (Interet) interetCombo.getSelectedItem(),
+                        raisonSocialeTextField.getText());
+                if (typeAction.equals(TypeAction.UPDATE)) {
+                    prospect.setIdentifiant(societe.getIdentifiant());
+                    typeSociete.getListe().replace(societe.getRaisonSociale(), prospect);
                 } else {
-
-                    Client client = (Client) getSociete();
-                    client.setRaisonSociale(raisonSocialeTextField.getText());
-                    client.setNombreEmployes(Integer.parseInt(nbEmployeTextField.getText()));
-                    client.setChiffreAffaire(Long.parseLong(chiffreAffaireTextField.getText()));
-                    // les listes gerent toutes seul l'auto incrément uniquement en create.
-                    if (!typeAction.equals(TypeAction.UPDATE)) {
-                        client.setIdentifiant(societe.getIdentifiant());
-                    } else {
-                        typeSociete.getListeSocietes().replace(societe.getRaisonSociale(), client);
-                    }
-
+                    typeSociete.getListe().ajouter(prospect);
+                }
+            } else {
+                // inspiré de la factory.
+                Client client = new Client(getSociete(),
+                        (Long) validerReglesAffichage("chiffreAffaire"),
+                        (int) validerReglesAffichage("nbEmploye"),
+                        raisonSocialeTextField.getText());
+                Client clientTmp = (Client) societe;
+                client.setListeContrats(clientTmp.getListeContrats());
+                // les listes gerent toutes seul l'auto incrément uniquement en create.
+                if (typeAction.equals(TypeAction.UPDATE)) {
+                    client.setIdentifiant(societe.getIdentifiant());
+                    typeSociete.getListe().replace(societe.getRaisonSociale(), client);
+                } else {
+                    typeSociete.getListe().ajouter(client);
 
                 }
-            } catch (
-                    DateTimeParseException e) {
-                afficherErreur(e.getMessage());
-            } catch (
-                    MandatoryDataException e) {
-                afficherErreur(e.getMessage());
-            } catch (
-                    RegexException e) {
-                afficherErreur(e.getMessage());
-            } catch (
-                    UniciteException e) {
-                afficherErreur(e.getMessage());
             }
-        } else {
-            afficherErreur(erreurDetectee);
+            dispose();
+        } catch (DateTimeParseException e) {
+            afficherErreur(e.getMessage());
+        } catch (MandatoryDataException e) {
+            afficherErreur(e.getMessage());
+        } catch (RegexException e) {
+            afficherErreur(e.getMessage());
+        } catch (UniciteException e) {
+            afficherErreur(e.getMessage());
+        } catch (AffichageException e) {
+            afficherErreur(e.getMessage());
         }
+    }
+
+    /**
+     * Delegue les controles d'affichage
+     * TODO -> mettre ca dans la futur Classe UtilConversion avec les TU associés.
+     *
+     * @param champs
+     * @return
+     * @throws AffichageException
+     */
+    private Object validerReglesAffichage(String champs) throws AffichageException {
+        Object retour = null;
+        switch (champs) {
+            case "dateProspect":
+                try {
+                    retour = LocalDate.parse(dateProspectTextField.getText(),
+                            DateTimeFormatter.ofPattern("dd/MM/uuuu"));
+
+                } catch (DateTimeParseException e) {
+                    throw new AffichageException(
+                            "date affichee ne respecte pas les standards (JJ/MM/AAAA)");
+                }
+                break;
+            case "nbEmploye":
+
+                try {
+                    retour = Integer.parseInt(nbEmployeTextField.getText());
+                } catch (NumberFormatException e) {
+                    throw new AffichageException("Le nombre d'employés doit être un chiffre");
+                }
+                break;
+
+            case "chiffreAffaire":
+                try {
+                    retour = Long.parseLong(chiffreAffaireTextField.getText());
+                } catch (NumberFormatException e) {
+                    throw new AffichageException("Le chiffre d'affaire doit être un chiffre");
+                }
+                break;
+        }
+        return retour;
+
     }
 
     private void onCancel() {
@@ -200,9 +235,10 @@ public class FormulaireSociete extends JDialog {
             chiffreAffaireTextField.setText(String.valueOf(client.getChiffreAffaire()));
         } else if (typeSociete.equals(TypeSociete.PROSPECT)) {
             Prospect prospect = (Prospect) societe;
-            dateProspecTextField.setText(prospect.getDateProspection()
+            dateProspectTextField.setText(prospect.getDateProspection()
                     .format(DateTimeFormatter.ofPattern("dd/MM/uuuu")));
             interetCombo.setSelectedItem(prospect.getInteret());
+
 
         }
         telTextField.setText(societe.getTelephone());
@@ -224,11 +260,10 @@ public class FormulaireSociete extends JDialog {
      * @throws RegexException
      * @throws UniciteException
      */
-    private Societe getSociete()  throws MandatoryDataException,RegexException, UniciteException{
+    private Societe getSociete() throws MandatoryDataException, RegexException, UniciteException {
         Adresse adresse = new Adresse(numRueTextField.getText(), nomRueTextField.getText(),
                 cpTextField.getText(), villeTextField.getText());
-        Societe retour = new Societe(adresse, mailTextField.getText(), telTextField.getText(),
-
+        Societe retour = new Societe(adresse, telTextField.getText(), mailTextField.getText(),
                 comTextField.getText());
         return retour;
     }
@@ -237,20 +272,9 @@ public class FormulaireSociete extends JDialog {
      * TODO : mettre une liste de composant boucler dessus.
      */
     private void disableFormulaire() {
-        dateProspecTextField.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
-        interetCombo.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
-        numRueTextField.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
-        nomRueTextField.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
-        cpTextField.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
-        villeTextField.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
-        telTextField.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
-        mailTextField.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
-        nbEmployeTextField.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
-        chiffreAffaireTextField.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
-        raisonSocialeTextField.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
-        idTextField.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
-        idTextField.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
-        comTextField.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
+        for (JComponent component : listeChampsFormulaire) {
+            component.setEnabled(!typeAction.equals(TypeAction.AFFICHER));
+        }
     }
 
     void afficherErreur(String message) {
