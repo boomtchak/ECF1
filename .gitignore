@@ -22,7 +22,6 @@
 /build/
 
 # Package files
-*.jar
 *.war
 *.ear
 *.zip
