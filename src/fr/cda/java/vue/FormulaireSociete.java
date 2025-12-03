@@ -154,6 +154,7 @@ public class FormulaireSociete extends JDialog {
                         (int) validerReglesAffichage("nbEmploye"),
                         raisonSocialeTextField.getText());
                 Client clientTmp = (Client) societe;
+                if(null != clientTmp.getListeContrats())
                 client.setListeContrats(clientTmp.getListeContrats());
                 // les listes gerent toutes seul l'auto incrément uniquement en create.
                 if (typeAction.equals(TypeAction.UPDATE)) {

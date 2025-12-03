@@ -63,3 +63,4 @@ Application de gestion des clients, prospects et contrats développée en Java 1
 🔒 Auteur
 
 Projet réalisé par Nordine Sefroun dans le cadre de l’ECF Java.
+Attention, le projet nécessite la librairie json-20250517.jar
